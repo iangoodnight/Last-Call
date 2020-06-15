@@ -1,0 +1,173 @@
+{{!-- <div class="container wrapper" id="remote">
+    <div class="customer-search" id="typeahead-target">
+        <input class="typeahead" type="text" autocomplete="off" placeholder="Customer">
+    <div>
+</div> --}}
+<!-- Button trigger modal -->
+<div class="wrapper container">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#orderModal">
+    New Order
+    </button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="orderModalLabel">Create New Order(s)</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body ui-front">
+        <form id="create-orders">
+            <input type="hidden" class="invisible" name="customerId" id="customer-id">
+            <input type="hidden" class="invisible" name="exists-in_house" id="exists-in_house">
+            <fieldset class="form-group">
+                <div class="row">
+                    <legend class="col-form-label col-sm-2 pt-0">
+                        Client:
+                    </legend>
+                    <div class="col-sm-10">
+                        <div class="form-check radios">
+                            <input class="form-check-input" id="customerRadio1" type="radio" name="customerRadio" value="0" checked>
+                            <label class="form-check-label" for="customerRadio1">
+                                Existing Customer
+                            </label>
+                        </div>
+                        <div class="form-check radios">
+                            <input class="form-check-input" id="customerRadio2" type="radio" name="customerRadio" value="1">
+                            <label class="form-check-label" for="customerRadio2">
+                                NEW Customer
+                            </label>
+                        </div> 
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-row">
+                <div class="col-md-12">
+                    <label for="inputCustomer">Search Customers</label>
+                    <input type="text" class="form-control customer-lookup" id="search-customers" placeholder="Start typing to search...">
+                </div>
+            </div>
+            <div class="new-customer">
+                <div class="form-row">
+                    <div class="form-group col-md-9">
+                        <label for="companyName">Company</label>
+                        <input type="text" name="company" class="form-control" id="companyName" placeholder="Enter company name">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="inHouse">In-House</label>
+                        <select class="form-control" name="inHouse" id="inHouse">
+                            <option value="">Select</option>
+                            <option value="1">True</option>
+                            <option value="0">False</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <span class="muted">Contact Information</span>
+                    <hr />
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="customerFirstName">First Name</label>
+                        <input type="text" name="firstName" class="form-control" id="customerFirstName" placeholder="Sam">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="customerLastName">Last Name</label>
+                        <input type="text" name="lastName" class="form-control" id="customerLastName" placeholder="Seriff">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="customerEmail">Email</label>
+                        <input type="email" name="email" class="form-control" id="customerEmail" placeholder="sam.seriff@aol.com">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="customerPhone">Telephone</label>
+                        <input type="tel" name="phone" class="form-control" id="customerPhone" placeholder="216 867 5309">
+                    </div>
+                </div>                
+            </div>
+            <button type="button" class="btn btn-primary new-customer continue" disabled>Continue</button>
+            {{!-- Begin Order details Form --}}
+            <div class="order-details">
+                <div class="form-row">
+                    <div class="col-md-11">
+                        <span class="muted">Order Information</span>
+                        <hr />
+                    </div>
+                    <div class="col-md-1">
+                        <button class="btn btn-primary add-orders">
+                            <i class="far fa-plus-square"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="orderNumber-1">Order #</label>
+                        <input type="text" name="orderNumber-1" class="form-control" id="orderNumber-1" placeholder="#100000000">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="upc-1">UPC</label>
+                        <input type="text" name="upc-1" class="form-control" id="upc-1" placeholder="111111111111">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="po-1">PO #</label>
+                        <input type="text" name="po-1" class="form-control" id="po-1" placeholder="12345">
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label for="qty-1">Quantity</label>
+                        <input type="text" name="qty-1" class="form-control" id="qty-1" placeholder="100">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="priority-1">Priority</label>
+                        <select class="form-control" name="priority-1" id="priority-1">
+                            <option value="false">Normal</option>
+                            <option value="true">Rush</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="artwork-1">Artwork</label>
+                        <input type="text" name="artwork-1" class="form-control" id="artwork-1">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="height-1">Height</label>
+                        <input type="text" name="dim1-1" class="form-control" id="height-1" placeholder="1.15">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="width-1">Width</label>
+                        <input type="text" name="dim2-1" class="form-control" id="width-1" placeholder="5.25">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="laminate-1">Laminate</label>
+                        <select class="form-control" name="laminate-1" id="laminate-1">
+                            <option>Matte</option>
+                            <option>High Gloss</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="notes-1">Notes</label>
+                        <textarea class="form-control" name="notes-1" id="notes-1" rows="2"></textarea> 
+                    </div>
+                </div>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" id="submit-orders" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+{{!-- <div class="container results-wrapper">
+    <div id="customer-list"></div>
+</div> --}}
+<script src="./javascripts/order.js" type="text/javascript"></script>

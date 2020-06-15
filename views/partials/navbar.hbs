@@ -1,0 +1,18 @@
+<nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+  	<div class="container-fluid">
+    	<a class="navbar-brand" href="/">Jobs Report</a>
+	  	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+	    	<span class="navbar-toggler-icon"></span>
+	  	</button>
+    	<div class="navbar-collapse" id="navbarNav">
+    		<ul class="navbar-nav mr-auto">
+	      		<li class="nav-item {{#if active_home}}active{{/if}}"><a class="nav-link" href="/">Home</a></li>
+	      		<li class="nav-item {{#if active_customer}}active{{/if}}"><a class="nav-link" href="/customers">Customers</a></li>
+	      		<li class="nav-item {{#if active_jobs}}active{{/if}}"><a class="nav-link" href="/orders">Jobs</a></li>
+	      		<li class="nav-item {{#if active_reporting}}active{{/if}}"><a class="nav-link" href="/">Reporting</a></li>
+	    	</ul>
+		</div>
+		{{#unless user}}<a href="/api/user/auth/google">Log In</a>{{/unless}}
+		{{#if user}}<a href="/api/user/logout">Log Out</a>{{/if}}
+	</div>
+</nav>

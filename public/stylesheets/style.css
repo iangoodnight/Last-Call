@@ -1,0 +1,67 @@
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.wrapper {
+	padding: 20px;
+}
+
+.modal {
+	width: 100%;
+}
+
+.add {
+	font-size: 2em;
+	font-weight: 200px;
+	margin: auto;
+}
+
+.form-row {
+	padding: 10px;
+}
+
+.new-customer {
+	display: none;
+}
+
+.order-details {
+	display: none;
+}
+
+.radios {
+	padding: 10px;
+}
+
+.times {
+	font-size: 2em;
+/*	font-weight: 200;*/
+	margin: auto;
+	color: grey;
+}
+
+.additional-orders {
+	color: grey;
+}
+
+.orderDetails {
+	display: none;
+}
+
+.ui-autocomplete {
+	position: absolute;
+	border: 2px solid #ccc;
+	border-radius: 2px;
+	background-color: #fff;
+	max-height: 400px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.ui-autocomplete .highlight {
+	font-weight: bold;
+	text-decoration: underline;
+}
