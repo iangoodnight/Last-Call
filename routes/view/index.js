@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const customerController = require('../../controllers/customerController');
+const jobController = require('../../controllers/jobController');
 const ah = require('express-async-handler');
 const passport = require('passport');
 
@@ -30,18 +31,17 @@ router.get('/', function(req, res, next) {
 router.get('/customers', ah(customerController.findAllView));
 /* GET orders page */
 router.get('/orders', function(req, res, next) {
-  	res.render('order', { title: 'Express', bodyClass: 'order', active: { active_jobs: true }});
+  	res.render('order', { 
+  		title: 'Express', 
+  		bodyClass: 'order', 
+  		active: { 
+  			active_jobs: true,
+  			user: req.user,
+  		}
+  	});
 });
+// Test findAndView route
+router.get('/order', ah(jobController.findAndView));
 
-async function fetchCustomerData(req, res) {
-	let customer = await customerController.findAllView;
-	console.log("Customer Data: ", customer);
-	res.render('customer', {
-		title: 'Express',
-		bodyClass: 'customer',
-		customer: customer,
-		active: { active_customer: true }
-	});
-}
 
 module.exports = router;

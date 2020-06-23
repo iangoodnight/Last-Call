@@ -1,5 +1,31 @@
-<div class="container wrapper">  
-    <form>
+<div class="container wrapper">
+    <div class="btn-toolbar justify-content-end" role="toolbar" aria-label="Search toggle">
+        <div class="btn-group mr-2" role="group" aria-label="Search or Add">
+            <button type="button" class="btn btn-sm btn-outline-secondary search-toggle active">Search</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary add-toggle">Add</button>
+        </div>
+    </div>
+    <div id="customer-filters">
+        <h3 class="mb-4">Customer Records</h3>
+        <div id="search-customer-dialog" class="input-group w-100 mb-2">
+        <input type="text" class="form-control customer-search customer-lookup" placeholder="Begin typing to search..." aria-label="Search for customers" aria-describedby="button-new-customer" name="new-customer" data-in_house={{#if pageOptions.match.in_house }}"true"{{else}}"false"{{/if}}>
+            <div class="input-group-append btn-group" id="in-house-filter">
+                <a href="?inHouse=true" class="btn btn-secondary {{#if pageOptions.match.in_house }}active{{/if}}" id="in-house-true" type="button">In House</a>
+                <a href="?inHouse=false" class="btn btn-secondary {{#unless pageOptions.match.in_house }}active{{/unless}}" id="in-house-false" type="button">External Customers</a>
+            </div>
+        </div>
+    </div>
+    <div id="add-customer-dialog" style="display: none;">
+        <h3 class="mb-4">New Customer</h3>
+        <div id="new-customer-dialog" class="input-group w-100 mb-2">
+        <input type="email" class="form-control" id="lookup-email" placeholder="Customer email" aria-label="Email address for new customer" aria-describedby="button-new-customer" name="new-customer">
+            <div class="input-group-append" id="button-new-customer">
+                <button class="btn btn-primary" id="bc-lookup" type="button">Lookup customer</button>
+                <button class="btn btn-info" id="manual-add" type="button">Manual add</button>
+            </div>
+        </div>
+    </div>
+    <form id="new-customer" style="display: none;">
         <div class="form-row">
             <div class="form-group col-md-9">
                 <label for="companyName">Company</label>
@@ -46,15 +72,15 @@
     <table class="table">
         <thead>
             <th scope="col">#</th>
-            <th scope="col">Contact</th>
-            <th scope="col">Company</th>
+            <th scope="col">Contact <a href="?inHouse={{#if pageOptions.match.in_house}}true{{else}}false{{/if}}&sortBy=contact_last&orderBy={{#if pageOptions.order}}desc{{else}}asc{{/if}}"><i class="fas fa-sort sort"></i></a></th>
+            <th scope="col">Company <a href="?inHouse={{#if pageOptions.match.in_house}}true{{else}}false{{/if}}&sortBy=company&orderBy={{#if pageOptions.order}}desc{{else}}asc{{/if}}"><i class="fas fa-sort sort"></i></a></th>
             <th scope="col">Phone</th>
-            <th scope="col">Email</th>    
+            <th scope="col">Email <a href="?inHouse={{#if pageOptions.match.in_house}}true{{else}}false{{/if}}&sortBy=email&orderBy={{#if pageOptions.order}}desc{{else}}asc{{/if}}"><i class="fas fa-sort sort"></i></a></th>    
         </thead>
         <tbody>
             {{#each customer }}
                 <tr class="results" data-id="{{this.customer._id}}">
-                    <th scope="col">{{math @index "+" 1 }}</td>
+                    <th scope="col">{{math @index "+" 1 }}</th>
                     <td>
                     {{#if this.contact_last}}{{ this.contact_last }}, {{ this.contact_first }}{{else}}---{{/if}}</td>
                     <td>{{ this.company }}</td>
@@ -64,5 +90,30 @@
             {{/each}}
         </tbody>
     </table>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="dropdown">
+                <a class="btn btn-outline-primary btn-sm limit dropdown-toggle" href="#" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Limit
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">25</a>
+                    <a class="dropdown-item" href="#">50</a>
+                    <a class="dropdown-item" href="#">100</a>
+                </div>
+            </div>            
+        </div>
+        <div class="col-sm-8">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                </ul>
+            </nav>            
+        </div>
+    </div>
 </div>
 <script src="./javascripts/customer.js" type="text/javascript"></script>

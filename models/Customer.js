@@ -66,6 +66,14 @@ var customerSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'Job'
     }],
+    bc: {
+      id: {
+        type: Number
+      },
+      provider: {
+        type: String
+      }
+    },
   	// Author is the person creating the record
   	createdBy: {
   		type: String

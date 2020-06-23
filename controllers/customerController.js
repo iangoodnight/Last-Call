@@ -1,5 +1,5 @@
 var db = require('../models');
-var async = require('async') // look into removing this later
+// var async = require('async') // look into removing this later
 
 const { body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
@@ -57,6 +57,11 @@ module.exports = {
 					'company': {
 						$in: regexes
 					}
+				},
+				{
+					'email': {
+						$in: regexes
+					}
 				}
 			]
 		})
@@ -73,52 +78,69 @@ module.exports = {
 	},
 	// Find and return for display
 	findAllView: async (req, res, next) => {
-		const match = {};
-		const sort = {};
-		const pageOptions = {};
-
-		if (req.query.inHouse) {
-			match.in_house = req.query.inHouse === 'true';
-		} else if (req.session.customerQuery.inHouse) {
-			console.log("fallback..");
-			match.in_house = req.session.customerQuery.inHouse === 'true';
+		console.log("Request Query: ", req.query);
+		console.log("Session Request: ", req.session);
+		// let match = {};
+		// let sort = {};
+		let pageOptions = {
+			match: {},
+			sort: {},
 		};
 
-		if (req.query.sortBy && req.query.orderBy) {
-			sort[req.query.sortBy] = req.query.orderBy === 'desc' ? -1 : 1;
+		switch (req.query.inHouse) {
+			case 'true':
+				pageOptions.match = { in_house: true };
+				break;
+			case 'false':
+				pageOptions.match = { in_house: false };
+				break;
+			default:
+				req.session.customerQuery.match ? pageOptions.match = req.session.customerQuery.match :
+					pageOptions.match = { in_house: false };
+				console.log("hitting default...");
+				break;
 		};
 
-		// console.log("Query Object: ", req.query);
-		// const pageOptions = req.query;
-		req.session.customerQuery = req.query;
+		if (req.query.sortBy) {
+			if (req.query.orderBy) {
+				if (req.query.orderBy === 'desc') {
+					pageOptions.sort[req.query.sortBy] = -1;
+					pageOptions.order = false;				
+				} else {
+					pageOptions.sort[req.query.sortBy] = 1;	
+					pageOptions.order = true;					
+				}
+			} else {
+				pageOptions.sort[req.query.sortBy] = 1;
+				pageOptions.order = true;
+			}
+		} else {
+			pageOptions.sort = req.session.customerQuery.sort;
+			pageOptions.order = req.session.customerQuery.order;
+		};
+
+		req.session.customerQuery = pageOptions;
+		// console.log("Match... ", match);
+		console.log("PageOptions... ", pageOptions);
+		console.log("CustomerQuery... ", req.session.customerQuery);
 
 		try {
 
-			// console.log("req: ", req);
-
 			const data = await db.Customer
 				.find({})
-				.where(match)
+				.where(pageOptions.match)
 				.skip(parseInt(req.query.skip))
 				.limit(parseInt(req.query.limit))
-				.sort(sort)
+				.sort(pageOptions.sort)
 				.lean();
-				// .populate('orders', { open: true })
-				// match,
-				// options: {
-				// 	limit: parseInt(req.query.limit),
-				// 	skip: parseInt(req.query.skip),
-				// 	sort
-				// }
-			// });
-			// res.cookie(test, "Rude Canadian");
-			// res.json(data);
+
 			res.render('customer', {
 				title: 'Express',
 				bodyClass: 'customer',
 				// data: {
 				// 	customer: data,
 				// },
+				pageOptions: pageOptions,
 				customer: data,
 				active: { 
 					active_customer: true,
@@ -129,19 +151,6 @@ module.exports = {
 		} catch (error) {
 			res.status(500).send();
 		}
-
-
-		// let allCustomers = await db.Customer.find({}).lean();
-		// console.log(allCustomers);
-		// res.render('customer', {
-		// 	title: 'Express',
-		// 	bodyClass: 'customer',
-		// 	// data: {
-		// 	// 	customer: allCustomers,
-		// 	// },
-		// 	customer: allCustomers,
-		// 	active: { active_customer: true }
-		// });
 	},
 	//
 	// UPDATE

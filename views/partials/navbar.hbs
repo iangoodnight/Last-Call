@@ -1,7 +1,8 @@
-<nav class="navbar navbar-dark bg-dark navbar-expand-lg">
-  	<div class="container-fluid">
-    	<a class="navbar-brand" href="/">Jobs Report</a>
-	  	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+{{!-- <nav class="navbar navbar-dark fixed-top flex-md-nowrap p-0 bg-dark navbar-expand-lg shadow"> --}}
+<nav class="navbar navbar-dark fixed-top flex-md-nowrap p-0 bg-dark shadow">
+{{!--   	<div class="container-fluid"> --}}
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/">Jobs Report</a>
+{{!-- 	  	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 	    	<span class="navbar-toggler-icon"></span>
 	  	</button>
     	<div class="navbar-collapse" id="navbarNav">
@@ -11,8 +12,28 @@
 	      		<li class="nav-item {{#if active_jobs}}active{{/if}}"><a class="nav-link" href="/orders">Jobs</a></li>
 	      		<li class="nav-item {{#if active_reporting}}active{{/if}}"><a class="nav-link" href="/">Reporting</a></li>
 	    	</ul>
-		</div>
-		{{#unless user}}<a href="/api/user/auth/google">Log In</a>{{/unless}}
-		{{#if user}}<a href="/api/user/logout">Log Out</a>{{/if}}
-	</div>
+		</div> --}}
+	<input class="form-control form-control-dark w-100 customer-search" type="text" name="search" placeholder="Search" aria-label="Search">
+		<div pseudo="-webkit-input-placeholder" id="placeholder" style="display: block !important;"></div>
+		<div></div>
+	</input>
+	<ul class="navbar-nav px-3">
+		<li class="nav-item text-nowrap">
+		{{#unless user}}
+			<a class="nav-link" href="/api/user/auth/google">Log In</a>
+		{{/unless}}
+		{{#if user}}
+			<a class="nav-link" href="/api/user/logout">Log Out</a>			
+		{{/if}}	
+		</li>
+	</ul>
+
+
+{{!-- 	<nav class="my-2 my-md-0 mr-md-3"> --}}
+{{!-- 				<div><a href="#">{{ user.profile.displayName }}</a></div> --}}
+{{!-- 				<div><a href="/api/user/logout">Log Out</a></div>
+			</nav>
+		{{/if}}
+ --}}
+{{!-- 	</div> --}}
 </nav>

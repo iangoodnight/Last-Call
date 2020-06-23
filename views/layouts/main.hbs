@@ -13,21 +13,74 @@
 	
 	{{> navbar active}}
 
-	{{#if expressFlash}}
+{{!-- 	{{#if expressFlash}}
 		<p><strong>FLASH!</strong> {{ expressFlash }}</p>
 	{{/if}}
 	{{#if sessionFlash.message}}
 		<div class="{{ sessionFlash.type }}">
 			<strong>FLASH!</strong> {{ sessionFlash.message }}
 		</div>
-	{{/if}}
+	{{/if}} --}}
 
-    {{{ body }}}
+	<div class="container-fluid">
+		<div class="row">
 
-	{{> footer}}
+			{{> sidebar active}}
+
+			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+				
+    			{{{ body }}}
+
+				{{> footer}}
+
+			</main>
+		</div>
+	</div>
 
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-
+	<script type="text/javascript" src="/javascripts/autocomplete.js"></script>
+	// <script type="text/javascript">
+	// 	$(document).ready(() => {
+	// 		$('a.limit').on('hover', () => {
+	// 			console.log($(this));
+	// 			$('a.limit').css('backgroundColor', '#e9ecef');
+	// 		})
+	// 	});
+	// </script>
+	<script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+	<script>
+		feather.replace();
+	</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+	<script>
+      	var ctx = document.getElementById("myChart");
+      	var myChart = new Chart(ctx, {
+        	type: 'line',
+        	data: {
+          	labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+          	datasets: [{
+            	data: [15339, 21345, 18483, 24003, 23489, 24092, 12034],
+            	lineTension: 0,
+            	backgroundColor: 'transparent',
+            	borderColor: '#007bff',
+            	borderWidth: 4,
+            	pointBackgroundColor: '#007bff'
+          	}]
+        	},
+        	options: {
+          	scales: {
+            	yAxes: [{
+              	ticks: {
+                	beginAtZero: false
+              	}
+            	}]
+          	},
+          	legend: {
+            	display: false,
+          	}
+        	}
+      	});
+    </script>
   </body>
 </html>

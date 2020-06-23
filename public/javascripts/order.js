@@ -167,10 +167,13 @@ $( document ).ready(function() {
 
 	function dataPrep(obj, customerId) {
 		let jobs = [];
-		let details = [];
+		let customer;
 		// look through form data and provide input where it is missing
 		obj.data.forEach(entry => {
-			let detailObj = {
+
+			let jobObj = {
+				order_number: '',
+				_customerId: customerId,
 				upc: '',
 				po: '',
 				qty: null,
@@ -183,29 +186,23 @@ $( document ).ready(function() {
 				laminate: '',
 				notes: ''
 			};
-
-			let jobObj = {
-				order_number: '',
-				_customerId: customerId
-			};
-
+			customer = customerId;
 			for (let [key, value] of Object.entries(entry)) {
 				if (key === 'orderNumber') {
 					jobObj.order_number = value;
 				} else if (key === 'dim1') {
-					detailObj.dimensions.dim1 = value;
+					jobObj.dimensions.dim1 = value;
 				} else if (key === 'dim2') {
-					detailObj.dimensions.dim2 = value;
+					jobObj.dimensions.dim2 = value;
 				} else {
-					detailObj[key] = value;
+					jobObj[key] = value;
 				};
 			};
 			jobs.push(jobObj);
-			details.push(detailObj);
 		});
 		return { 
-			details: details,
-			jobs: jobs 
+			jobs: jobs,
+			customer: customer
 		};
 	};
 
@@ -237,21 +234,22 @@ $( document ).ready(function() {
 						// Continue if order number exists
 						if (numberCheck) {
 							let transformed = dataPrep(formObj, formObj.customer.customerId);
-							let details = transformed.details;
+							// let details = transformed.details;
 							let jobs = transformed.jobs;
 							console.log("DEBUG: ",transformed);
-							call.postDetails(details)
-							.then(res => {
-								console.log("Posted Details: ", res);
-								if (res.ops) {
-									for (let i = 0; i < res.ops.length; i++) {
-										jobs[i].details = res.ops[i]._id;
-									};									
-								} else {
-									jobs[0].details = res[0]._id;
-								};
-								return jobs;
-							}).then(call.postJobs(jobs))
+							// call.postDetails(details)
+							// .then(res => {
+							// 	console.log("Posted Details: ", res);
+							// 	if (res.ops) {
+							// 		for (let i = 0; i < res.ops.length; i++) {
+							// 			jobs[i].details = res.ops[i]._id;
+							// 		};									
+							// 	} else {
+							// 		jobs[0].details = res[0]._id;
+							// 	};
+							// 	return jobs;
+							// }).then(call.postJobs(jobs))
+							call.postJobs(jobs)
 							.then(res => {
 								console.log("This route is working, but ugly");
 								console.log("can we see here? ", res);

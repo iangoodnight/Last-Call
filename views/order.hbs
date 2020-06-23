@@ -1,13 +1,57 @@
-{{!-- <div class="container wrapper" id="remote">
-    <div class="customer-search" id="typeahead-target">
-        <input class="typeahead" type="text" autocomplete="off" placeholder="Customer">
-    <div>
+{{!-- <div class="container-fluid tabs">    
+    <nav class="nav">
+        <ul class="nav nav-tabs" id="orders-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" href="#">Order queue</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" href="#">Production queue</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" href="#">Orders on hold</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" href="#">Outsourced orders</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" href="#">Completed orders</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" href="#">Cancelled orders</a>
+            </li>
+        </ul>
+    </nav>
 </div> --}}
+
 <!-- Button trigger modal -->
 <div class="wrapper container">
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#orderModal">
     New Order
     </button>
+</div>
+<div class="container-fluid wrapper" id="order-table">
+    <table class="table">
+        <thead>
+            <th scope="col">#</th>
+            <th scope="col">Artwork</th>
+            <th scope="col">Dimensions</th>
+            <th scope="col">Laminate</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Status</th>
+        </thead>
+        <tbody>
+            {{#each order }}
+            <tr class="results" data-id="{{this._id}}">
+                <th scope="col">{{this.order_number}}</th>
+                <td>{{this.artwork}}</td>
+                <td>{{this.dimensions.dim1}} X {{this.dimensions.dim2}}</td>
+                <td>{{this.laminate}}</td>
+                <td>{{this.qty}}</td>
+                <td>{{this.status.status}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
 </div>
 
 <!-- Modal -->

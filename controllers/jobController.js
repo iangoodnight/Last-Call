@@ -1,5 +1,5 @@
 var db = require("../models");
-var async = require('async') // look into removing this later
+// var async = require('async') // look into removing this later
 
 const { body, validationResult } = require('express-validator/check'); // Deprecated, come back and fix
 const { sanitizeBody } = require('express-validator/filter'); // Deprecated, come back and fix
@@ -55,5 +55,44 @@ module.exports = {
 			jobs: newJobs,
 			customer: updateCustomer
 		});
+	},
+	//
+	// READ
+	//
+	// Find for Job View
+	findAndView: async (req, res, next) => {
+		console.log("Hitting jobController.findAndView...")
+		console.log("Request Query: ", req.query);
+		console.log("Session Request: ", req.session);
+		let match = {};
+		let sort = {};
+
+		try {
+
+			const data = await db.Job
+				.find({})
+				.where(match)
+				// .skip(parseInt(req.query.skip))
+				// .limit(parseInt(req.query.limit))
+				// .sort(sort)
+				.populate("status")
+				.populate("customer")
+				.lean();
+
+			console.log("Data: ", data);
+
+			res.render('order', {
+				title: 'Suicide by JavaScript',
+				bodyClass: 'order',
+				order: data,
+				active: {
+					active_order: true,
+					user: req.user,
+				}
+			});
+		} catch (error) {
+			console.log(error);
+			// res.status(500).send();
+		}
 	}
 }
