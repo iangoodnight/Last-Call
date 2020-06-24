@@ -8,7 +8,7 @@
     <div id="customer-filters">
         <h3 class="mb-4">Customer Records</h3>
         <div id="search-customer-dialog" class="input-group w-100 mb-2">
-        <input type="text" class="form-control customer-search customer-lookup" placeholder="Begin typing to search..." aria-label="Search for customers" aria-describedby="button-new-customer" name="new-customer" data-in_house={{#if pageOptions.match.in_house }}"true"{{else}}"false"{{/if}}>
+        <input type="text" id="find-customer" class="form-control customer-search customer-lookup" placeholder="Begin typing to search..." aria-label="Search for customers" aria-describedby="button-new-customer" name="new-customer" data-in_house={{#if pageOptions.match.in_house }}"true"{{else}}"false"{{/if}}>
             <div class="input-group-append btn-group" id="in-house-filter">
                 <a href="?inHouse=true" class="btn btn-secondary {{#if pageOptions.match.in_house }}active{{/if}}" id="in-house-true" type="button">In House</a>
                 <a href="?inHouse=false" class="btn btn-secondary {{#unless pageOptions.match.in_house }}active{{/unless}}" id="in-house-false" type="button">External Customers</a>
@@ -79,8 +79,8 @@
         </thead>
         <tbody>
             {{#each customer }}
-                <tr class="results" data-id="{{this.customer._id}}">
-                    <th scope="col">{{math @index "+" 1 }}</th>
+                <tr class="results" data-id="{{this._id}}">
+                    <th scope="col">{{math @index "+" ../pageOptions.index }}</th>
                     <td>
                     {{#if this.contact_last}}{{ this.contact_last }}, {{ this.contact_first }}{{else}}---{{/if}}</td>
                     <td>{{ this.company }}</td>
@@ -94,23 +94,21 @@
         <div class="col-sm-4">
             <div class="dropdown">
                 <a class="btn btn-outline-primary btn-sm limit dropdown-toggle" href="#" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Limit
+                    Limit {{ pageOptions.limit }}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">25</a>
-                    <a class="dropdown-item" href="#">50</a>
-                    <a class="dropdown-item" href="#">100</a>
+                    <a class="dropdown-item" href="?limit=25&sortBy=updatedAt&orderBy=asc">25</a>
+                    <a class="dropdown-item" href="?limit=50&sortBy=updatedAt&orderBy=asc">50</a>
+                    <a class="dropdown-item" href="?limit=100&sortBy=updatedAt&orderBy=asc">100</a>
                 </div>
             </div>            
         </div>
         <div class="col-sm-8">
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-end">
-                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    {{#each pageOptions.pagination }}
+                        <li class="page-item"><a class="page-link" href="?skip={{this.skip}}">{{this.page}}</a></li>
+                    {{/each}}
                 </ul>
             </nav>            
         </div>

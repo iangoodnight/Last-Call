@@ -20,15 +20,9 @@ router.get('/', function(req, res, next) {
   	console.log("Session access: ", req.user);
 });
 /* GET customers page */
-// router.get('/customers', async function(req, res, next) {
-// 	let customer = await ah(customerController.findAll);
-//   	res.render('customer', { 
-//   		title: 'Express', 
-//   		bodyClass: 'customer',
-//   		customer: customer, 
-//   		active: { active_customer: true }});
-// });
-router.get('/customers', ah(customerController.findAllView));
+router.get('/customers', ah(customerController.findAllAndView));
+/* GET customer profile */
+router.get('/customers/:id', ah(customerController.findOneAndView));
 /* GET orders page */
 router.get('/orders', function(req, res, next) {
   	res.render('order', { 

@@ -76,8 +76,40 @@ module.exports = {
 		});
 		res.json(formattedResults);
 	},
+	//
+	// FIND AND VIEW
+	//
+	findOneAndView: async (req, res, next) => {
+		try {
+			console.log(req.params.id);
+			let customer = await db.Customer.findById(req.params.id)
+				.populate({
+					path:'orders',
+					populate: {
+						path: 'status'
+					}
+				})
+				.populate('status')
+				.lean();
+
+
+			console.log(customer);
+			res.render('customerProfile', {
+				title: 'Express',
+				bodyClass: 'customer-profile',
+				customer: customer,
+				active: { 
+					active_customer: true,
+					user: req.user,
+				}
+			});			
+		} catch (error) {
+			console.log(error);
+		};
+
+	},
 	// Find and return for display
-	findAllView: async (req, res, next) => {
+	findAllAndView: async (req, res, next) => {
 		console.log("Request Query: ", req.query);
 		console.log("Session Request: ", req.session);
 		// let match = {};
@@ -85,6 +117,8 @@ module.exports = {
 		let pageOptions = {
 			match: {},
 			sort: {},
+			limit: 25,
+			skip: 0
 		};
 
 		switch (req.query.inHouse) {
@@ -97,7 +131,6 @@ module.exports = {
 			default:
 				req.session.customerQuery.match ? pageOptions.match = req.session.customerQuery.match :
 					pageOptions.match = { in_house: false };
-				console.log("hitting default...");
 				break;
 		};
 
@@ -119,6 +152,20 @@ module.exports = {
 			pageOptions.order = req.session.customerQuery.order;
 		};
 
+		if (req.query.limit) {
+			pageOptions.limit = parseInt(req.query.limit);
+		} else if (req.session.customerQuery.limit) {
+			pageOptions.limit = parseInt(req.session.customerQuery.limit);
+		};
+
+		if (req.query.skip) {
+			pageOptions.skip = parseInt(req.query.skip);
+		} else if (req.session.customerQuery.skip) {
+			pageOptions.skip = parseInt(req.session.customerQuery.skip);
+		}
+
+		pageOptions.index = pageOptions.skip + 1;
+
 		req.session.customerQuery = pageOptions;
 		// console.log("Match... ", match);
 		console.log("PageOptions... ", pageOptions);
@@ -130,16 +177,43 @@ module.exports = {
 				.find({})
 				.where(pageOptions.match)
 				.skip(parseInt(req.query.skip))
-				.limit(parseInt(req.query.limit))
+				.limit(pageOptions.limit)
 				.sort(pageOptions.sort)
 				.lean();
+
+			const count = await db.Customer.countDocuments( pageOptions.match );
+			let pages = Math.ceil(count/pageOptions.limit);
+			let currentPage = Math.ceil(pageOptions.skip/pageOptions.limit) + 1;
+			console.log("Current: ", currentPage);
+			let pageArray = [];
+			for (let i = 0; i < pages; i++) {
+				let page = i + 1;
+				let skip = (page - 1)*pageOptions.limit;
+				if (page - currentPage  >= -1) {
+					if (page - currentPage === -1) {
+						page = '...';
+						pageArray.push({
+							page: page,
+							skip: skip
+						});
+					} else if (page - currentPage <= 6) {
+						if (page - currentPage === 6) {
+							page = '...';
+						};
+						pageArray.push({
+							page: page,
+							skip: skip
+						});
+					};
+				};
+			};
+			pageOptions.pagination = pageArray;
+
+			console.log("Document count: ", pages, " ", pageArray);
 
 			res.render('customer', {
 				title: 'Express',
 				bodyClass: 'customer',
-				// data: {
-				// 	customer: data,
-				// },
 				pageOptions: pageOptions,
 				customer: data,
 				active: { 

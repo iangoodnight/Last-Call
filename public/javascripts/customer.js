@@ -3,13 +3,9 @@ $( document ).ready(function() {
     console.log( "ready!" );
 
     $("form").on("submit", function(e) {
-        // e.preventDefault();
     	handleCustomerPost();
     });
 
-    // $(".table").delegate("tr", "click", function() {
-    // 	alert("click");
-    // })
     $('button.search-toggle').on('click', () => {
         $('button.add-toggle').removeClass('active');
         $('button.search-toggle').addClass('active');
@@ -34,6 +30,69 @@ $( document ).ready(function() {
             renderBCCustomer(customers);
 
         };      
+    });
+
+    $('#find-customer').keyup(e => {
+        let target = $(e.target).data('id');
+        console.log(target);
+        if (e.keyCode == 13 && target) {
+            $('#find-customer').attr('disabled', 'disabled');
+            let url = '/customers/' + target;
+            $(location).attr('href', url);
+        };
+    });
+
+    $('i.fa-pencil-alt').on('click', e => {
+        let spans = $('span.edit');
+        let rows = $(spans).closest('div.row');
+        let target = $(e.target).closest('div.row');
+        let edit = $(target).find('span.edit');
+        $(rows).css('background-color', '#fff');
+        $(spans).attr('contenteditable', 'false');
+        $(target).css({
+            'background-color': '#f8f9fa'
+        });
+        $(edit).css({
+            'background-color': '#fff'
+        })
+        $(edit).attr('contenteditable','true');
+        $(edit).focus().select();
+        console.log(target);
+        $(target).blur(e => {
+            console.log('BLURRRRRR');
+            $(rows).css('background-color', '#fff');
+            $(spans).attr('contenteditable', 'false');            
+        });
+    });
+
+
+    // SHit ain't working....
+    $('span.edit').change(e => {
+        console.log("CH-CH-CH-CHaANNNNGES!!!");
+    })
+
+    $('span.edit').on('keydown', e => {
+        if (e.keyCode == 13) {
+            $(e.target).blur();
+            $(e.target).attr('contenteditable', 'false');
+            $(e.target).closest('div.row').css('background-color', '#fff');
+        }
+    })
+
+    $('body').mouseup(e => {
+        if ($(e.target).closest('div.card div.row').length === 0) {
+            let spans = $('span.edit');
+            let rows = $(spans).closest('div.row');
+            $(rows).css('background-color', '#fff');
+            $(spans).attr('contenteditable', 'false');
+            console.log('Shoot me in the head!');
+        };
+    })
+
+    $('table tr.results').on('dblclick', (e) => {
+        let target = $(e.target).parent().data('id');
+        let url = '/customers/' + target;
+        $(location).attr('href', url);
     });
 
     async function renderBCCustomer(customerArr) {

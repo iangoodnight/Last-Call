@@ -177,3 +177,24 @@ a i.sort {
 	font-weight: bold;
 	text-decoration: underline;
 }
+
+td.status {
+	text-transform: uppercase;
+}
+
+span.key {
+	margin-bottom: 5px;
+	font-weight: 500;
+}
+
+div.card span.edit {
+	padding-right: 10%;
+}
+
+div.card div.row {
+	padding: 3px;
+}
+
+div.card div.row i {
+	color: grey;
+}

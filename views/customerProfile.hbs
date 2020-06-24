@@ -1,0 +1,94 @@
+<div class="wrapper container-fluid">
+	<h4 class="mb-4">Customer Info</h4>
+	<div class="card">
+		{{#if customer.in_house }}
+		<div class="card-header">In-House</div>
+		{{/if}}
+		<div class="card-body">
+			<div class="row" data-id="{{customer._id}}" data-key="company">
+				<div class="col-sm-11">
+					<h5 class="card-title">
+						<span class="edit">{{customer.company}}</span>
+					</h5>
+				</div>
+				<div class="col-sm-1">
+					<i class="fas fa-pencil-alt"></i>					
+				</div>
+			</div>
+			<hr />
+			<div class="row">
+				<div class="col-sm-12">
+					<p class="card-text"><strong>Contact:</strong></p>
+				</div>
+			</div>
+			<div class="row" data-id="{{customer._id}}" data-key="contact_first">
+				<div class="col-sm-11">
+					<p class="card-text">
+						<span class="key">First name: </span>
+						<span class="edit">
+							{{customer.contact_first}}
+						</span>
+					</p>
+				</div>
+				<div class="col-sm-1"><i class="fas fa-pencil-alt"></i></div>
+			</div>
+			<div class="row" data-id="{{customer._id}}" data-key="contact_last">
+				<div class="col-sm-11">
+					<p class="card-text">
+						<span class="key">Last name: </span>
+						<span class="edit">
+							{{customer.contact_last}}
+						</span>
+					</p>
+				</div>
+				<div class="col-sm-1"><i class="fas fa-pencil-alt"></i></div>
+			</div>
+			<div class="row" data-id="{{customer._id}}" data-key="phone">
+				<div class="col-sm-11">
+					<p class="card-text">
+						<span class="key">Phone: </span>
+						<span class="edit">
+							{{customer.phone}}
+						</span>
+					</p>
+				</div>
+				<div class="col-sm-1"><i class="fas fa-pencil-alt"></i></div>
+			</div>
+			<div class="row" data-id="{{customer._id}}" data-key="email">
+				<div class="col-sm-11">
+					<p class="card-text">
+						<span class="key">Email: </span>
+						<span class="edit">
+							<a href="mailto:{{customer.email}}" target="_blank">{{customer.email}}</a>
+						</span>
+					</p>
+				</div>
+				<div class="col-sm-1"><i class="fas fa-pencil-alt"></i></div>
+			</div>
+		</div>
+	</div>
+	{{#if customer.orders}}
+    <h5 class="mb-4 mt-4">Orders</h5>
+	<table class="table">
+		<thead>
+			<th scope="col">#</th>
+			<th scope="col">Artwork</th>
+			<th scope="col">Dimensions</th>
+			<th scope="col">Qty</th>
+			<th scope="col">Status</th>
+		</thead>
+		<tbody>
+		{{#each customer.orders }}
+			<tr class="results" data-id="{{this._id}}">
+				<td>{{this.order_number}}</td>
+				<td>{{this.artwork}}</td>
+				<td>{{this.dimensions.dim1}}" x {{this.dimensions.dim2}}"</td>
+				<td>{{this.qty}}</td>
+				<td class='status'>{{this.status.status}}</td>
+			</tr>
+		{{/each}}
+		</tbody>
+	</table>
+	{{/if}}
+</div>
+<script src="../javascripts/customer.js" type="text/javascript"></script>
