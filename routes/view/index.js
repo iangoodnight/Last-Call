@@ -24,18 +24,18 @@ router.get('/customers', ah(customerController.findAllAndView));
 /* GET customer profile */
 router.get('/customers/:id', ah(customerController.findOneAndView));
 /* GET orders page */
-router.get('/orders', function(req, res, next) {
-  	res.render('order', { 
-  		title: 'Express', 
-  		bodyClass: 'order', 
-  		active: { 
-  			active_jobs: true,
-  			user: req.user,
-  		}
-  	});
-});
+// router.get('/orders', function(req, res, next) {
+//   	res.render('order', { 
+//   		title: 'Express', 
+//   		bodyClass: 'order', 
+//   		active: { 
+//   			active_jobs: true,
+//   			user: req.user,
+//   		}
+//   	});
+// });
 // Test findAndView route
-router.get('/order', ah(jobController.findAndView));
+router.get('/orders', ah(jobController.findAndView));
 
 
 module.exports = router;

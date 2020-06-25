@@ -2,6 +2,19 @@ $( document ).ready(function() {
 
     console.log( "ready!" );
 
+    //  To do: Clear out redundant calls on #notes
+
+    $('body').on('focus', '[contenteditable]', function() {
+        const $this = $(this);
+        $this.data('before', $this.html());
+    }).on('blur keyup paste input', '[contenteditable]', function() {
+        const $this = $(this);
+        if ($this.data('before') !== $this.html()) {
+            $this.data('before', $this.html());
+            $this.trigger('change');
+        }
+    });
+
     $("form").on("submit", function(e) {
     	handleCustomerPost();
     });
@@ -44,48 +57,89 @@ $( document ).ready(function() {
 
     $('i.fa-pencil-alt').on('click', e => {
         let spans = $('span.edit');
+        $(spans).removeClass('selectAll');
         let rows = $(spans).closest('div.row');
         let target = $(e.target).closest('div.row');
         let edit = $(target).find('span.edit');
         $(rows).css('background-color', '#fff');
         $(spans).attr('contenteditable', 'false');
-        $(target).css({
-            'background-color': '#f8f9fa'
-        });
-        $(edit).css({
-            'background-color': '#fff'
-        })
-        $(edit).attr('contenteditable','true');
-        $(edit).focus().select();
+        $('#customer-email-link').unbind('click');
+        if (!$(target).hasClass('notes')) {
+            $('span#notes').text($('div.notes-entry div textarea').val());
+            $('div.notes-entry').fadeOut(500);
+            $('span#notes').fadeIn(1600);            
+            $(target).css({
+                'background-color': '#f8f9fa'
+            });
+            $(edit).css({
+                'background-color': '#fff'
+            });
+            $(edit).attr('contenteditable','true');
+            $(edit).addClass('selectAll');
+            $(edit).focus().select();
+            requestAnimationFrame(() => {
+                selectElementContents(document.querySelector('span.edit.selectAll'));
+            });            
+        } else {
+            let currentNotes = $(edit).text();
+            console.log(currentNotes);
+            // $('div.notes-entry textarea').val(currentNotes);
+            $(edit).fadeOut(500);
+            $('div.notes-entry').fadeIn(500);
+            $('#notes-area').focus();
+            $('div.notes-entry textarea').val('');
+            $('div.notes-entry textarea').val(currentNotes);
+        }
+
         console.log(target);
-        $(target).blur(e => {
-            console.log('BLURRRRRR');
-            $(rows).css('background-color', '#fff');
-            $(spans).attr('contenteditable', 'false');            
-        });
     });
 
+    $('span.edit').on('change', e => {
+        console.log("Shit is changing!");
+        $(e.target).addClass('new');
+        $('button.save-on-change').fadeIn(800);
+    });
 
-    // SHit ain't working....
-    $('span.edit').change(e => {
-        console.log("CH-CH-CH-CHaANNNNGES!!!");
+    $('#notes-area').on('keyup', e => {
+        let note = $('#notes-area').val();
+        $('#notes').text(note);
+        console.log(note);
+        $('#notes').addClass('new');
+        $('button.save-on-change').fadeIn(800);
+        console.log("here we gooooooo!");
     })
 
+    // Select all conteneditable onFocus
+    function selectElementContents(el) {
+        let range = document.createRange();
+        range.selectNodeContents(el);
+        let sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+    };
+
     $('span.edit').on('keydown', e => {
-        if (e.keyCode == 13) {
+        if (e.keyCode == 13 && !e.ctrlKey) {
             $(e.target).blur();
             $(e.target).attr('contenteditable', 'false');
             $(e.target).closest('div.row').css('background-color', '#fff');
+            $('#customer-email-link').bind('click');    
         }
-    })
+    });
 
+    //
+    // Maybe we need to clean this up.  Seems to add some confusion to customer edit form
+    //
     $('body').mouseup(e => {
         if ($(e.target).closest('div.card div.row').length === 0) {
             let spans = $('span.edit');
             let rows = $(spans).closest('div.row');
             $(rows).css('background-color', '#fff');
             $(spans).attr('contenteditable', 'false');
-            console.log('Shoot me in the head!');
+            $('span#notes').text($('div.notes-entry div textarea').val());
+            $('div.notes-entry').fadeOut(500);
+            $('span#notes').fadeIn(1600);
+            $('#customer-email-link').bind('click');    
         };
     })
 
@@ -93,6 +147,19 @@ $( document ).ready(function() {
         let target = $(e.target).parent().data('id');
         let url = '/customers/' + target;
         $(location).attr('href', url);
+    });
+
+    $('button.save-on-change').on('click', () => {
+        let customerUpdate = {};
+        $('span.new').each((index, el) => {
+            let key = $( el ).data('key');
+            let val = $( el ).text().trim();
+            customerUpdate[key] = val;
+            console.log('key: ', key, '\nval: ', val);
+        });
+        let id = $('#customer-info').data('id');
+        call.updateCustomer(customerUpdate, id);
+        console.log("Customer Update: ", customerUpdate);
     });
 
     async function renderBCCustomer(customerArr) {

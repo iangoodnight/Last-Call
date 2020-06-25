@@ -1,14 +1,14 @@
 <div class="wrapper container-fluid">
 	<h4 class="mb-4">Customer Info</h4>
-	<div class="card">
+	<div class="card" id="customer-info" data-id="{{customer._id}}">
 		{{#if customer.in_house }}
 		<div class="card-header">In-House</div>
 		{{/if}}
 		<div class="card-body">
-			<div class="row" data-id="{{customer._id}}" data-key="company">
+			<div class="row">
 				<div class="col-sm-11">
 					<h5 class="card-title">
-						<span class="edit">{{customer.company}}</span>
+						<span class="edit" data-key="company">{{customer.company}}</span>
 					</h5>
 				</div>
 				<div class="col-sm-1">
@@ -21,49 +21,65 @@
 					<p class="card-text"><strong>Contact:</strong></p>
 				</div>
 			</div>
-			<div class="row" data-id="{{customer._id}}" data-key="contact_first">
+			<div class="row">
 				<div class="col-sm-11">
 					<p class="card-text">
 						<span class="key">First name: </span>
-						<span class="edit">
+						<span class="edit" data-key="contact_first">
 							{{customer.contact_first}}
 						</span>
 					</p>
 				</div>
 				<div class="col-sm-1"><i class="fas fa-pencil-alt"></i></div>
 			</div>
-			<div class="row" data-id="{{customer._id}}" data-key="contact_last">
+			<div class="row"\>
 				<div class="col-sm-11">
 					<p class="card-text">
 						<span class="key">Last name: </span>
-						<span class="edit">
+						<span class="edit" data-key="contact_last">
 							{{customer.contact_last}}
 						</span>
 					</p>
 				</div>
 				<div class="col-sm-1"><i class="fas fa-pencil-alt"></i></div>
 			</div>
-			<div class="row" data-id="{{customer._id}}" data-key="phone">
+			<div class="row">
 				<div class="col-sm-11">
 					<p class="card-text">
 						<span class="key">Phone: </span>
-						<span class="edit">
+						<span class="edit" data-key="phone">
 							{{customer.phone}}
 						</span>
 					</p>
 				</div>
 				<div class="col-sm-1"><i class="fas fa-pencil-alt"></i></div>
 			</div>
-			<div class="row" data-id="{{customer._id}}" data-key="email">
+			<div class="row">
 				<div class="col-sm-11">
 					<p class="card-text">
 						<span class="key">Email: </span>
-						<span class="edit">
-							<a href="mailto:{{customer.email}}" target="_blank">{{customer.email}}</a>
+						<span class="edit" data-key="email">
+							<a href="mailto:{{customer.email}}" id="customer-email-link" target="_blank">{{customer.email}}</a>
 						</span>
 					</p>
 				</div>
 				<div class="col-sm-1"><i class="fas fa-pencil-alt"></i></div>
+			</div>
+			<div class="row notes">
+				<div class="col-sm-11">
+					<span class="key">Notes: </span><span class="edit" id="notes" data-key="notes">{{customer.notes}}</span>
+				</div>
+				<div class="col-sm-1"><i class="fas fa-pencil-alt notes"></i></div>	
+			</div>
+			<div class="row notes-entry">
+				<div class="col-sm-11">
+					<textarea id="notes-area" class="w-100" rows="4">{{customer.notes}}</textarea>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<button class="btn btn-primary btn-sm save-on-change float-sm-right">Save changes</button>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -198,3 +198,22 @@ div.card div.row {
 div.card div.row i {
 	color: grey;
 }
+
+li.page-item a.page-link.active {
+	font-weight: 500;
+	text-decoration: underline;
+	background-color: #e9ecef;
+}
+
+div.notes-entry {
+	display: none;
+}
+
+div.notes-entry textarea {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+button.save-on-change {
+	display: none;
+}

@@ -47,5 +47,28 @@ const call = {
 			console.log(error);
 		}
 
+	},
+	//
+	// UPDATE
+	//
+	// FIGURE OUT THIS FUCKING URL ISSSSSSSSSSSSUE!!!!!!!!!!
+	updateCustomer: async (data, id) => {
+		console.log("Updating customer...");
+		console.log(window.location.origin);
+		// let url = window.location.origin + '/api/customer/' + id;
+		let url = 'http://localhost:3001/api/customer/' + id;
+
+		try {
+			console.log("Inside URL: ", url);
+			let response = await $.ajax({
+				method: 'PUT',
+				url: url
+			});
+
+			return response;
+		} catch (error) {
+			console.log(error);
+		}
+		console.log("URL: ", url);
 	}
 };

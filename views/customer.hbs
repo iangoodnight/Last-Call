@@ -107,7 +107,7 @@
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-end">
                     {{#each pageOptions.pagination }}
-                        <li class="page-item"><a class="page-link" href="?skip={{this.skip}}">{{this.page}}</a></li>
+                        <li class="page-item"><a class="page-link {{#if this.current}}active{{/if}}" href="?skip={{this.skip}}">{{this.page}}</a></li>
                     {{/each}}
                 </ul>
             </nav>            

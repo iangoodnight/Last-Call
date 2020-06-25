@@ -74,6 +74,9 @@ var customerSchema = new Schema({
         type: String
       }
     },
+    notes: {
+      type: String
+    },
   	// Author is the person creating the record
   	createdBy: {
   		type: String

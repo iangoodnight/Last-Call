@@ -11,6 +11,8 @@ module.exports = {
 	// Create a new customer
 	create: async (req, res, next) => {
 		console.log("Hitting customerController.create...");
+		req.body.customer.createdBy = req.user.user.email;
+		console.log("Customer Object: ", req.body.customer);
 		let newCustomer = await db.Customer.create(req.body.customer);
 		res.json(newCustomer);
 	},
@@ -89,11 +91,8 @@ module.exports = {
 						path: 'status'
 					}
 				})
-				.populate('status')
 				.lean();
 
-
-			console.log(customer);
 			res.render('customerProfile', {
 				title: 'Express',
 				bodyClass: 'customer-profile',
@@ -112,6 +111,7 @@ module.exports = {
 	findAllAndView: async (req, res, next) => {
 		console.log("Request Query: ", req.query);
 		console.log("Session Request: ", req.session);
+		console.log("Req: ", req);
 		// let match = {};
 		// let sort = {};
 		let pageOptions = {
@@ -189,6 +189,7 @@ module.exports = {
 			for (let i = 0; i < pages; i++) {
 				let page = i + 1;
 				let skip = (page - 1)*pageOptions.limit;
+				let current = false;
 				if (page - currentPage  >= -1) {
 					if (page - currentPage === -1) {
 						page = '...';
@@ -200,14 +201,19 @@ module.exports = {
 						if (page - currentPage === 6) {
 							page = '...';
 						};
+						if (page - currentPage === 0) {
+							current = true;
+						}
 						pageArray.push({
 							page: page,
-							skip: skip
+							skip: skip,
+							current: current
 						});
 					};
 				};
 			};
 			pageOptions.pagination = pageArray;
+			pageOptions.index > count ? pageOptions.index = 1: pageOptions.index = pageOptions.index;
 
 			console.log("Document count: ", pages, " ", pageArray);
 
@@ -247,7 +253,8 @@ module.exports = {
 				setDefaultsOnInsert: true
 			}
 		);
-		res.json(updatedCustomer);
+		// res.json(updatedCustomer);
+		res.redirect('back');
 	},
 	//
 	// DELETE
