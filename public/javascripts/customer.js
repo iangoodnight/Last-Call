@@ -130,7 +130,7 @@ $( document ).ready(function() {
     //
     // Maybe we need to clean this up.  Seems to add some confusion to customer edit form
     //
-    $('body').mouseup(e => {
+    $('body').mousedown(e => {
         if ($(e.target).closest('div.card div.row').length === 0) {
             let spans = $('span.edit');
             let rows = $(spans).closest('div.row');

@@ -211,7 +211,7 @@ $( document ).ready(function() {
 		// Check for data
 		console.log("formObj.customer.customerRadio", formObj.customer.customerRadio);
 		let transformed = dataPrep(formObj, formObj.customer.customerId);
-		let details = transformed.details;
+		// let details = transformed.details;
 		let jobs = transformed.jobs;
 		// Check for new or existing customer to handle those cases
 		switch (formObj.customer.customerRadio) {
@@ -249,7 +249,7 @@ $( document ).ready(function() {
 							// 	};
 							// 	return jobs;
 							// }).then(call.postJobs(jobs))
-							call.postJobs(jobs)
+							call.postJobs(jobs, transformed.customer)
 							.then(res => {
 								console.log("This route is working, but ugly");
 								console.log("can we see here? ", res);

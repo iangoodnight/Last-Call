@@ -121,6 +121,16 @@ module.exports = {
 			skip: 0
 		};
 
+		if (!req.session.customerQuery) {
+			let customerQuery = {
+				match: {},
+				sort: {},
+				limit: 25,
+				skip: 0
+			};	
+			req.session.customerQuery = customerQuery;		
+		};
+
 		switch (req.query.inHouse) {
 			case 'true':
 				pageOptions.match = { in_house: true };
@@ -237,13 +247,14 @@ module.exports = {
 	//
 	// 	Update a customer by id
 	update: async (req, res, next) => {
-		console.log("Hitting customerController.update...", req.body.customer);
+		console.log("Hitting customerController.update...", req.body);
+		let id = req.params.id;
 		let updatedCustomer = await db.Customer.findByIdAndUpdate(
 			// Customer id parsed from request
-			req.params.id,
+			id,
 			// Update object
 			{
-				$set: req.body.customer
+				$set: req.body
 			},
 			// Options object
 			{
@@ -253,8 +264,8 @@ module.exports = {
 				setDefaultsOnInsert: true
 			}
 		);
-		// res.json(updatedCustomer);
-		res.redirect('back');
+		res.json(updatedCustomer);
+		// res.redirect('back');
 	},
 	//
 	// DELETE

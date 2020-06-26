@@ -6,6 +6,7 @@ const flash = require('express-flash');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const sassMiddleware = require('node-sass-middleware');
 const compression = require('compression');
 const helmet = require('helmet');
 const dotenv = require('dotenv');
@@ -67,6 +68,12 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(sassMiddleware({
+  src: path.join(__dirname, 'public'),
+  dest: path.join(__dirname, 'public'),
+  indentedSyntax: false, // true = .sass and false = .scss
+  sourceMap: true
+}));
 app.use(session({
   resave: true,
   saveUninitialized: true,

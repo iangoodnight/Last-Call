@@ -1,0 +1,241 @@
+//
+// Body styles
+//
+body {
+	font-size: .875rem;
+}
+//
+// End body styles
+//
+// Elements
+//
+a {
+	&.limit {
+		border: 1px solid #dee2e6;
+		line-height: 1.25;
+		padding: .5rem .75rem;
+		&:hover {
+			background-color: #e9ecef;
+			border-color: #dee2e6;
+			color: #0056b3;			
+		}		
+	}
+	i {
+		.sort {
+			color: black;			
+		}
+
+	}
+}
+
+button {
+	&.save-on-change {
+		display: none;		
+	}
+}
+
+div {
+	.card {
+		span.edit {
+			padding-right: 10%;			
+		}
+	}
+	.notes-entry {
+		display: none;
+		textarea {
+			padding-left: 15px;
+			padding-right: 15px;			
+		}
+	}
+	.row {
+		padding: 3px;
+		i {
+			color: grey;			
+		}	
+	}
+	.wrapper {
+		padding: 20px;
+	}
+}
+
+footer {
+	background-color: black;
+	.container {
+		padding: 10px;
+		color: white;		
+	}
+}
+
+span {
+	&.key {
+		margin-bottom: 5px;
+		font-weight: 500;
+	}
+}
+
+table {
+	tr {
+		td {
+			&.status {
+				text-transform: uppercase;
+			}
+		}
+	}
+}
+
+ul {
+	li {
+		&.page-item {
+			a {
+				&.page-link {
+					&.active {
+						font-weight: 500;
+						text-decoration: underline;
+						background-color: #e9ecef;						
+					}
+				}
+			}
+		}
+	}
+	&.nav {
+		&.nav-tabs {
+			border-bottom: none;			
+		}
+	}
+}
+//
+// End Elements
+//
+
+//
+// IDs
+//
+
+//
+// Classes
+//
+.add {
+	font-size: 2em;
+	font-weight: 200px;
+	margin: auto;
+}
+
+.additional-orders {
+	color: grey;
+}
+
+.feather {
+	width: 16px;
+	height: 16px;
+	vertical-align: text-bottom;
+}
+
+.form-control-dark {
+	color: #fff;
+	background-color: rgba(255, 255, 255, .1);
+	border-color: rgba(255, 255, 255, .1);
+}
+
+.form-row {
+	padding: 10px;
+}
+
+.sidebar {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 100;
+	padding: 48px 0 0;
+	box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+	.nav-link {
+		font-weight: 500;
+		color: #333;
+		.active {			
+			color: #007bff;
+			.feather {
+				color: inherit;				
+			}
+		}
+		.feather {
+			margin-right: 4px;
+			color: #999;
+		}
+	}
+}
+
+.sidebar-heading {
+	font-size: .75rem;
+	text-transform: uppercase;
+}
+
+.sidebar-sticky {
+	position: relative;
+	top: 0;
+	height: calc(100vh - 48px);
+	padding-top: .5rem;
+	overflow-x: hidden;
+	overflow-y: auto;
+	position: -webkit-sticky;
+	position: sticky;
+}
+
+.modal {
+	width: 100%;
+}
+
+.navbar {
+	.form-control {
+		padding: .75rem 1rem;
+		border-width: 0;
+		border-radius: 0;
+	}
+	.navbar-brand {
+		padding-top: .75rem;
+		padding-bottom: .75rem;
+		font-size: 1rem;
+		background-color: rgba(0, 0, 0, .25);
+		box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25)
+	}
+}
+
+.new-customer {
+	display: none;
+}
+
+.order-details {
+	display: none;
+}
+// One of these two is likely redundant
+.orderDetails {
+	display: none;
+}
+
+.radios {
+	padding: 10px;
+}
+
+.times {
+	font-size: 2em;
+	margin: auto;
+	color: grey;
+}
+
+.ui-autocomplete {
+	position: absolute;
+	border: 2px solid #ccc;
+	border-radius: 2px;
+	background-color: #fff;
+	max-height: 400px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	font-size: .875rem;
+	.highlight {
+		font-weight: bold;
+		text-decoration: underline;
+	}
+}
+
+[role="main"] {
+	padding-top: 48px;
+}

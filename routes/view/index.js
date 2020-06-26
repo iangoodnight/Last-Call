@@ -23,6 +23,9 @@ router.get('/', function(req, res, next) {
 router.get('/customers', ah(customerController.findAllAndView));
 /* GET customer profile */
 router.get('/customers/:id', ah(customerController.findOneAndView));
+/* UPDATE customer profile */
+/* Probably need to move this route to the API directory */
+// router.put('customers/:id', ah(customerController.update));
 /* GET orders page */
 // router.get('/orders', function(req, res, next) {
 //   	res.render('order', { 
