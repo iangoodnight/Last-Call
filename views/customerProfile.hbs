@@ -11,7 +11,7 @@
 						<span class="edit" data-key="company">{{customer.company}}</span>
 					</h5>
 				</div>
-				<div class="col-sm-1">
+				<div class="col-sm-1 text-right">
 					<i class="fas fa-pencil-alt"></i>					
 				</div>
 			</div>
@@ -30,7 +30,7 @@
 						</span>
 					</p>
 				</div>
-				<div class="col-sm-1"><i class="fas fa-pencil-alt"></i></div>
+				<div class="col-sm-1 text-right"><i class="fas fa-pencil-alt"></i></div>
 			</div>
 			<div class="row"\>
 				<div class="col-sm-11">
@@ -41,7 +41,7 @@
 						</span>
 					</p>
 				</div>
-				<div class="col-sm-1"><i class="fas fa-pencil-alt"></i></div>
+				<div class="col-sm-1 text-right"><i class="fas fa-pencil-alt"></i></div>
 			</div>
 			<div class="row">
 				<div class="col-sm-11">
@@ -52,7 +52,7 @@
 						</span>
 					</p>
 				</div>
-				<div class="col-sm-1"><i class="fas fa-pencil-alt"></i></div>
+				<div class="col-sm-1 text-right"><i class="fas fa-pencil-alt"></i></div>
 			</div>
 			<div class="row">
 				<div class="col-sm-11">
@@ -63,13 +63,13 @@
 						</span>
 					</p>
 				</div>
-				<div class="col-sm-1"><i class="fas fa-pencil-alt"></i></div>
+				<div class="col-sm-1 text-right"><i class="fas fa-pencil-alt"></i></div>
 			</div>
 			<div class="row notes">
 				<div class="col-sm-11">
 					<span class="key">Notes: </span><span class="edit" id="notes" data-key="notes">{{customer.notes}}</span>
 				</div>
-				<div class="col-sm-1"><i class="fas fa-pencil-alt notes"></i></div>	
+				<div class="col-sm-1 text-right"><i class="fas fa-pencil-alt notes"></i></div>	
 			</div>
 			<div class="row notes-entry">
 				<div class="col-sm-11">
@@ -85,22 +85,148 @@
 	</div>
 	{{#if customer.orders}}
     <h5 class="mb-4 mt-4">Orders</h5>
-	<table class="table">
+	<table class="table" id="orders-table">
 		<thead>
+			<th scope="col"><input type="checkbox" class="" id="order-select-all"></th>
 			<th scope="col">#</th>
 			<th scope="col">Artwork</th>
-			<th scope="col">Dimensions</th>
 			<th scope="col">Qty</th>
 			<th scope="col">Status</th>
+			<th scope="col">Details</th>
 		</thead>
 		<tbody>
 		{{#each customer.orders }}
-			<tr class="results" data-id="{{this._id}}">
-				<td>{{this.order_number}}</td>
-				<td>{{this.artwork}}</td>
-				<td>{{this.dimensions.dim1}}" x {{this.dimensions.dim2}}"</td>
-				<td>{{this.qty}}</td>
-				<td class='status'>{{this.status.status}}</td>
+			<tr class="order-results" data-id="{{this._id}}">
+				<td><input type="checkbox"></td>
+				<td class="order-number">{{this.order_number}}</td>
+				<td class="order-details-header">{{this.artwork}}</td>
+				<td class="order-details-header">{{this.qty}}</td>
+				<td class="order-details-header status">{{this.status.status}}</td>
+				<td class="text-center"><i class="fas fa-search open-order"></i></td>
+			</tr>
+			<tr class="order-edit" id={{this._id}}>
+				<td></td>
+				<td colspan="5">
+					<table class="table-sm nested w-100" data-id="{{this._id}}" data-order_number="{{this.order_number}}">
+						<tr data-key="artwork">
+							<td><strong>Artwork: </strong></td>
+							<td colspan="2">
+								<span class="edit">
+									{{this.artwork}}
+								</span>
+							</td>
+							<td class="text-right">
+								<i class="fa fa-pencil-alt"></i>
+							</td>
+						</tr>
+						<tr data-key="dimensions">
+							<td><strong>Dimensions: </strong></td>
+							<td colspan="2">
+								<span class="edit">
+									{{this.dimensions.dim1}}" x {{this.dimensions.dim2}}"
+								</span>
+							</td>
+							<td class="text-right">
+								<i class="fa fa-pencil-alt"></i>
+							</td>
+						</tr>
+						<tr data-key="laminate" class="laminate">
+							<td><strong>Laminate: </strong></td>
+							<td colspan="2">
+								<span class="edit input-swap">
+									{{this.laminate}}
+								</span>
+							</td>
+							<td class="text-right">
+								<i class="fa fa-pencil-alt"></i>
+							</td>
+						</tr>
+						<tr data-key="machine">
+							<td><strong>Machine: </strong></td>
+							<td colspan="2">
+								<span class="edit">
+									{{this.machine}}
+								</span>
+							</td>
+							<td class="text-right">
+								<i class="fa fa-pencil-alt"></i>
+							</td>
+						</tr>
+						<tr data-key="qty">
+							<td><strong>Quantity: </strong></td>
+							<td colspan="2">
+								<span class="edit">
+									{{this.qty}}
+								</span>
+							</td>
+							<td class="text-right">
+								<i class="fa fa-pencil-alt"></i>
+							</td>
+						</tr>
+						<tr data-key="upc">
+							<td><strong>UPC: </strong></td>
+							<td colspan="2">
+								<span class="edit">
+									{{this.upc}}
+								</span>
+							</td>
+							<td class="text-right">
+								<i class="fa fa-pencil-alt"></i>
+							</td>
+						</tr>
+						<tr data-key="status">
+							<td><strong>Status: </strong></td>
+							<td class="status" colspan="2">
+								<span class="edit">
+									{{this.status.status}}
+								</span>
+							</td>
+							<td class="text-right">
+								<i class="fa fa-pencil-alt"></i>
+							</td>
+						</tr>
+						{{#if this.outsourced}}
+						<tr data-key="outsourced_company">
+							<td><strong>Outsourced: </strong></td>
+							<td colspan="2">
+								<span class="edit">
+									{{this.outsourced_company}}
+								</span>
+							</td>
+							<td class="text-right">
+								<i class="fa fa-pencil-alt"></i>
+							</td>
+						</tr>
+						<tr data-key="po">
+							<td><strong>Purchase Order: </strong></td>
+							<td colspan="2">
+								<span class="edit">
+									{{this.po}}
+								</span>
+							</td>
+							<td class="text-right">
+								<i class="fa fa-pencil-alt"></i>
+							</td>
+						</tr>
+						{{/if}}
+						<tr data-key="notes">
+							<td><strong>Notes: </strong></td>
+							<td colspan="2">
+								<span class="edit">
+									{{this.notes}}
+								</span>
+							</td>
+							<td class="text-right">
+								<i class="fa fa-pencil-alt"></i>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="4">
+								<button class='btn btn-primary btn-sm float-sm-right save-order'>Save changes</button>
+							</td>
+						</tr>
+					</table>
+				</td>
 			</tr>
 		{{/each}}
 		</tbody>

@@ -29,6 +29,9 @@ var jobSchema = new Schema({
 	laminate: {
 		type: String
 	},
+	machine: {
+		type: String
+	},
 	notes: {
 		type: String
 	},

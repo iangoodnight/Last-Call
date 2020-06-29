@@ -14,10 +14,12 @@ a i .sort {
   color: black; }
 
 button.save-on-change {
-  display: none; }
+  display: none;
+  margin-top: 20px; }
 
-div .card span.edit {
-  padding-right: 10%; }
+button.save-order {
+  display: none;
+  margin-top: 20px; }
 
 div .notes-entry {
   display: none; }
@@ -39,12 +41,28 @@ footer {
     padding: 10px;
     color: white; }
 
+i.fa-pencil-alt:hover {
+  color: #007bff; }
+
 span.key {
   margin-bottom: 5px;
   font-weight: 500; }
 
+span.edit {
+  padding-right: 10%; }
+
+table tr td i.fa-search:hover {
+  color: #007bff; }
+
 table tr td.status {
   text-transform: uppercase; }
+
+table tr.order-edit {
+  display: none;
+  background-color: #f8f9fa; }
+
+table.nested td {
+  border: none; }
 
 ul li.page-item a.page-link.active {
   font-weight: 500;

@@ -1,4 +1,9 @@
 //
+// Colors
+//
+$color-active-grey: #f8f9fa;
+$color-active-medium-grey: rgba(0,0,0,.075);
+//
 // Body styles
 //
 body {
@@ -24,22 +29,21 @@ a {
 		.sort {
 			color: black;			
 		}
-
 	}
 }
 
 button {
 	&.save-on-change {
-		display: none;		
+		display: none;
+		margin-top: 20px;		
+	}
+	&.save-order {
+		display: none;
+		margin-top: 20px;
 	}
 }
 
 div {
-	.card {
-		span.edit {
-			padding-right: 10%;			
-		}
-	}
 	.notes-entry {
 		display: none;
 		textarea {
@@ -66,6 +70,14 @@ footer {
 	}
 }
 
+i {
+	&.fa-pencil-alt {
+		&:hover {
+			color: #007bff;
+		}
+	}
+}
+
 span {
 	&.key {
 		margin-bottom: 5px;
@@ -73,12 +85,34 @@ span {
 	}
 }
 
+span {
+	&.edit {
+		padding-right: 10%;			
+	}
+}
+
 table {
 	tr {
 		td {
+			i {
+				&.fa-search {
+					&:hover {
+						color: #007bff;
+					}
+				}
+			}
 			&.status {
 				text-transform: uppercase;
 			}
+		}
+		&.order-edit {
+			display: none;
+			background-color: $color-active-grey;
+		}
+	}
+	&.nested {
+		td {
+			border: none;
 		}
 	}
 }

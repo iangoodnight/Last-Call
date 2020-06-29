@@ -12,7 +12,7 @@ $( document ).ready(function() {
         if ($this.data('before') !== $this.html()) {
             $this.data('before', $this.html());
             $this.trigger('change');
-        }
+        };
     });
 
     $("form").on("submit", function(e) {
@@ -39,9 +39,7 @@ $( document ).ready(function() {
         let email = $('#lookup-email').val();
         if (email !== '') {
             let customers = await call.getBCCustomer(email);
-            console.log("Customer: ", customers);
             renderBCCustomer(customers);
-
         };      
     });
 
@@ -54,8 +52,50 @@ $( document ).ready(function() {
             $(location).attr('href', url);
         };
     });
+    // Handle Order Edits through customer profile
+    $('table.nested tbody tr td i.fa-pencil-alt').on('click', e => {
+        console.log("Edit order...");
+        let spans = $('span.edit');
+        $(spans).removeClass('selectAll'); 
+        let row = $(e.target).closest('tr');
+        let target = $(row).find('span.edit');
 
-    $('i.fa-pencil-alt').on('click', e => {
+        switch ($(row).data('key')) {
+            case 'laminate':
+                let select = [];
+                let defaultOption = '<option value=""> Select   </option>';
+                let matte = '<option value="Matte"> Matte   </option>';
+                let highGloss = '<option value="High-gloss"> High-gloss   </option>';
+                select.push('<select class="temporary-input">');
+                let current = $(target).text().trim();
+                console.log('Current: ', current);
+                if (current !== '') {
+                    current === 'Matte' ? select.push(matte, highGloss) :
+                        select.push(highGloss, matte);
+                } else {
+                    select.push(defaultOption, highGloss, matte);
+                };
+                select.push('</select>');
+                let selectAll = select.join('');
+                if ($(row).find('select.temporary-input').length === 0) {
+                    $(target).hide();
+                    $(target).closest('td').append(selectAll);
+                };
+                break;
+            default:
+                $(target).addClass('selectAll');
+                $(target).css('background-color', '#fff');
+                $(target).attr('contenteditable', 'true');
+                $(target).focus().select();
+                requestAnimationFrame(() => {
+                    selectElementContents(document.querySelector('span.edit.selectAll'));
+                });
+                break;
+        };
+
+    });
+
+    $('#customer-info i.fa-pencil-alt').on('click', e => {
         let spans = $('span.edit');
         $(spans).removeClass('selectAll');
         let rows = $(spans).closest('div.row');
@@ -82,20 +122,21 @@ $( document ).ready(function() {
             });            
         } else {
             let currentNotes = $(edit).text();
-            console.log(currentNotes);
-            // $('div.notes-entry textarea').val(currentNotes);
             $(edit).fadeOut(500);
             $('div.notes-entry').fadeIn(500);
             $('#notes-area').focus();
             $('div.notes-entry textarea').val('');
             $('div.notes-entry textarea').val(currentNotes);
-        }
-
-        console.log(target);
+        };
     });
 
-    $('span.edit').on('change', e => {
-        console.log("Shit is changing!");
+    $('table.nested span.edit').on('change', e => {
+        $(e.target).addClass('new');
+        let table = $(e.target).closest('table');
+        $(table).find('button.save-order').fadeIn(800);
+    });
+
+    $('div.card-body span.edit').on('change', e => {
         $(e.target).addClass('new');
         $('button.save-on-change').fadeIn(800);
     });
@@ -103,10 +144,8 @@ $( document ).ready(function() {
     $('#notes-area').on('keyup', e => {
         let note = $('#notes-area').val();
         $('#notes').text(note);
-        console.log(note);
         $('#notes').addClass('new');
         $('button.save-on-change').fadeIn(800);
-        console.log("here we gooooooo!");
     })
 
     // Select all conteneditable onFocus
@@ -122,6 +161,7 @@ $( document ).ready(function() {
         if (e.keyCode == 13 && !e.ctrlKey) {
             $(e.target).blur();
             $(e.target).attr('contenteditable', 'false');
+            $(e.target).css('background-color', 'inherit');
             $(e.target).closest('div.row').css('background-color', '#fff');
             $('#customer-email-link').bind('click');    
         }
@@ -131,15 +171,21 @@ $( document ).ready(function() {
     // Maybe we need to clean this up.  Seems to add some confusion to customer edit form
     //
     $('body').mousedown(e => {
-        if ($(e.target).closest('div.card div.row').length === 0) {
+        let target = $(e.target);
+        if (target.closest('div.card div.row').length === 0 || target.closest('table.nested').length === 0) {
             let spans = $('span.edit');
             let rows = $(spans).closest('div.row');
             $(rows).css('background-color', '#fff');
             $(spans).attr('contenteditable', 'false');
+            $(spans).css('background-color', 'inherit');
             $('span#notes').text($('div.notes-entry div textarea').val());
             $('div.notes-entry').fadeOut(500);
-            $('span#notes').fadeIn(1600);
-            $('#customer-email-link').bind('click');    
+            $('span#notes').fadeIn(1000);
+            $('#customer-email-link').bind('click');
+            if (target.closest('table.nested').length === 0) {
+                $('.temporary-input').remove(); 
+                $('span.input-swap').show();               
+            }
         };
     })
 
@@ -149,17 +195,23 @@ $( document ).ready(function() {
         $(location).attr('href', url);
     });
 
+    $('tr.laminate').on('change', 'select.temporary-input', (e) => {
+        let newValue = $(e.target).val();
+        $(e.target).closest('td').find('span.edit').text(newValue);
+        $(e.target).closest('td').find('span.edit').addClass('new');
+    });
+
     $('button.save-on-change').on('click', () => {
         let customerUpdate = {};
         $('span.new').each((index, el) => {
             let key = $( el ).data('key');
             let val = $( el ).text().trim();
             customerUpdate[key] = val;
-            console.log('key: ', key, '\nval: ', val);
         });
         let id = $('#customer-info').data('id');
         call.updateCustomer(customerUpdate, id);
-        console.log("Customer Update: ", customerUpdate);
+        location.reload();
+
     });
 
     async function renderBCCustomer(customerArr) {
@@ -218,23 +270,7 @@ $( document ).ready(function() {
                 customerObj[key] = dataObj[key];
             }
         };
-        console.log("customerObj: ", customerObj);
         call.postCustomer(customerObj);
-    };
-
-    function addJobListener() {
-    	$(".add-job").on("click", function() {
-    		var id = $(this).data('id');
-    		console.log("Inside the button: ", $(this).data('id'));
-    		$.ajax({
-    			method: "POST",
-    			url: "/api/job",
-    			data: {
-    				order_number: Math.floor(Math.random()*100),
-    				_customerId: id
-    			}
-    		})
-    	})
     };
 
     $('#manual-add').on('click', () => {
@@ -245,13 +281,36 @@ $( document ).ready(function() {
 
         $('#new-customer-dialog').fadeOut(1600);
         $('#new-customer').fadeIn(1600);
+    });
+
+    // This is getting complicated.  These are additions to customerProfile with a comment explainer for each line
+
+    // Handle magnifying glass onClick (Display order details)
+    $('.open-order').on('click', (e) => {
+        let target = e.target;
+        let row = $(target).closest('tr.order-results');
+        let id = row.data('id');
+        $('#' + id).toggle(600);
+        if (!row.hasClass('toggled')) {
+            row.addClass('toggled');
+            row.children('td.order-details-header').css('visibility', 'hidden');
+            row.children('td.order-number').css({
+                'font-weight': 'bolder',
+                'font-size': '1rem'
+            });
+        } else {
+            row.removeClass('toggled');
+            row.children('td.order-details-header').css('visibility', 'visible');
+            row.children('td.order-number').css({
+                'font-weight': 'normal',
+                'font-size': 'inherit'
+            });
+        }
+        console.log(id);
     })
 
     function handleCustomerPost() {
-
-    	console.log("Posting customer...");
-
-    	var customerObject = {
+    	let customerObject = {
     		company: $("#companyName").val(),
     		contact_first: $("#customerFirstName").val(),
     		contact_last: $("#customerLastName").val(),
@@ -261,10 +320,7 @@ $( document ).ready(function() {
     		author: null
     	};
         // I changed the method slightly, come back and clean this up.
-        var newObj = JSON.stringify({ customer: customerObject })
-
-    	console.log("Customer Data: ", customerObject);
-
+        let newObj = JSON.stringify({ customer: customerObject })
     	$.ajax({
     		method: "POST",
     		url: "/api/customer",
@@ -272,13 +328,24 @@ $( document ).ready(function() {
             dataType: "json",
             contentType: "application/json"
     	}).then(function(data) {
-
     		console.log("Posted Data: ", data);
-
-    	})
-
+    	});
     };
 
+    // function addJobListener() {
+    //  $(".add-job").on("click", function() {
+    //      var id = $(this).data('id');
+    //      console.log("Inside the button: ", $(this).data('id'));
+    //      $.ajax({
+    //          method: "POST",
+    //          url: "/api/job",
+    //          data: {
+    //              order_number: Math.floor(Math.random()*100),
+    //              _customerId: id
+    //          }
+    //      })
+    //  })
+    // };
 
     // UTILITIES
     function isEmpty(obj) {
