@@ -32,7 +32,7 @@
 				</div>
 				<div class="col-sm-1 text-right"><i class="fas fa-pencil-alt"></i></div>
 			</div>
-			<div class="row"\>
+			<div class="row">
 				<div class="col-sm-11">
 					<p class="card-text">
 						<span class="key">Last name: </span>
@@ -86,7 +86,7 @@
 	{{#if customer.orders}}
     <h5 class="mb-4 mt-4">Orders</h5>
 	<table class="table" id="orders-table">
-		<thead>
+		<thead class="table-active">
 			<th scope="col"><input type="checkbox" class="" id="order-select-all"></th>
 			<th scope="col">#</th>
 			<th scope="col">Artwork</th>
@@ -108,120 +108,123 @@
 				<td></td>
 				<td colspan="5">
 					<table class="table-sm nested w-100" data-id="{{this._id}}" data-order_number="{{this.order_number}}">
-						<tr data-key="artwork">
-							<td><strong>Artwork: </strong></td>
-							<td colspan="2">
+						<tr class="d-flex" data-key="artwork">
+							<td class="table-key col-sm-2"><strong>Artwork: </strong></td>
+							<td class="col-sm-8">
 								<span class="edit">
 									{{this.artwork}}
 								</span>
 							</td>
-							<td class="text-right">
+							<td class="text-right col-sm-2">
 								<i class="fa fa-pencil-alt"></i>
 							</td>
 						</tr>
-						<tr data-key="dimensions">
-							<td><strong>Dimensions: </strong></td>
-							<td colspan="2">
+						<tr class="d-flex" data-key="dimensions">
+							<td class="table-key col-sm-2"><strong>Dimensions: </strong></td>
+							<td class="col-sm-8">
 								<span class="edit">
 									{{this.dimensions.dim1}}" x {{this.dimensions.dim2}}"
 								</span>
 							</td>
-							<td class="text-right">
+							<td class="text-right col-sm-2">
 								<i class="fa fa-pencil-alt"></i>
 							</td>
 						</tr>
-						<tr data-key="laminate" class="laminate">
-							<td><strong>Laminate: </strong></td>
-							<td colspan="2">
+						<tr class="d-flex select" data-key="laminate">
+							<td class="table-key col-sm-2"><strong>Laminate: </strong></td>
+							<td class="col-sm-8">
 								<span class="edit input-swap">
 									{{this.laminate}}
 								</span>
 							</td>
-							<td class="text-right">
+							<td class="text-right col-sm-2">
 								<i class="fa fa-pencil-alt"></i>
 							</td>
 						</tr>
-						<tr data-key="machine">
-							<td><strong>Machine: </strong></td>
-							<td colspan="2">
-								<span class="edit">
+						<tr class="d-flex select" data-key="machine">
+							<td class="table-key col-sm-2"><strong>Machine: </strong></td>
+							<td class="col-sm-8">
+								<span class="edit input-swap">
 									{{this.machine}}
 								</span>
 							</td>
-							<td class="text-right">
+							<td class="text-right col-sm-2">
 								<i class="fa fa-pencil-alt"></i>
 							</td>
 						</tr>
-						<tr data-key="qty">
-							<td><strong>Quantity: </strong></td>
-							<td colspan="2">
+						<tr class="d-flex" data-key="qty">
+							<td class="table-key col-sm-2"><strong>Quantity: </strong></td>
+							<td class="col-sm-8">
 								<span class="edit">
 									{{this.qty}}
 								</span>
 							</td>
-							<td class="text-right">
+							<td class="text-right col-sm-2">
 								<i class="fa fa-pencil-alt"></i>
 							</td>
 						</tr>
-						<tr data-key="upc">
-							<td><strong>UPC: </strong></td>
-							<td colspan="2">
+						<tr class="d-flex" data-key="upc">
+							<td class="table-key col-sm-2"><strong>UPC: </strong></td>
+							<td class="col-sm-8">
 								<span class="edit">
 									{{this.upc}}
 								</span>
 							</td>
-							<td class="text-right">
+							<td class="text-right col-sm-2">
 								<i class="fa fa-pencil-alt"></i>
 							</td>
 						</tr>
-						<tr data-key="status">
-							<td><strong>Status: </strong></td>
-							<td class="status" colspan="2">
-								<span class="edit">
+						<tr class="d-flex select" data-key="status">
+							<td class="table-key col-sm-2"><strong>Status: </strong></td>
+							<td class="status col-sm-8">
+								<span class="edit input-swap">
 									{{this.status.status}}
 								</span>
 							</td>
-							<td class="text-right">
+							<td class="text-right col-sm-2">
 								<i class="fa fa-pencil-alt"></i>
 							</td>
 						</tr>
 						{{#if this.outsourced}}
-						<tr data-key="outsourced_company">
-							<td><strong>Outsourced: </strong></td>
-							<td colspan="2">
+						<tr class="d-flex" data-key="outsourced_company">
+							<td class="table-key col-sm-2"><strong>Outsourced: </strong></td>
+							<td class="col-sm-8">
 								<span class="edit">
 									{{this.outsourced_company}}
 								</span>
 							</td>
-							<td class="text-right">
+							<td class="text-right col-sm-2">
 								<i class="fa fa-pencil-alt"></i>
 							</td>
 						</tr>
-						<tr data-key="po">
-							<td><strong>Purchase Order: </strong></td>
-							<td colspan="2">
+						<tr class="d-flex" data-key="po">
+							<td class="table-key col-sm-2"><strong>Purchase Order: </strong></td>
+							<td class="col-sm-8">
 								<span class="edit">
 									{{this.po}}
 								</span>
 							</td>
-							<td class="text-right">
+							<td class="text-right col-sm-2">
 								<i class="fa fa-pencil-alt"></i>
 							</td>
 						</tr>
 						{{/if}}
-						<tr data-key="notes">
-							<td><strong>Notes: </strong></td>
-							<td colspan="2">
+						<tr class="d-flex notes" data-key="notes">
+							<td class="table-key col-sm-2"><strong>Notes: </strong></td>
+							<td class="col-sm-8">
 								<span class="edit">
 									{{this.notes}}
 								</span>
+								<textarea class="w-100" style="display: none;">
+									{{this.notes}}
+								</textarea>
 							</td>
-							<td class="text-right">
+							<td class="text-right col-sm-2">
 								<i class="fa fa-pencil-alt"></i>
 							</td>
 						</tr>
-						<tr>
-							<td colspan="4">
+						<tr class="d-flex">
+							<td class="col-sm-12">
 								<button class='btn btn-primary btn-sm float-sm-right save-order'>Save changes</button>
 							</td>
 						</tr>
@@ -233,4 +236,4 @@
 	</table>
 	{{/if}}
 </div>
-<script src="../javascripts/customer.js" type="text/javascript"></script>
+<script src="../javascripts/customerProfile.js" type="text/javascript"></script>

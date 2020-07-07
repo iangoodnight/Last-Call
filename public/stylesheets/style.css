@@ -49,13 +49,18 @@ span.key {
   font-weight: 500; }
 
 span.edit {
-  padding-right: 10%; }
+  padding-right: 10%;
+  padding-left: 6px;
+  padding-top: 2px;
+  padding-bottom: 2px; }
 
 table tr td i.fa-search:hover {
   color: #007bff; }
 
 table tr td.status {
   text-transform: uppercase; }
+  table tr td.status select {
+    text-transform: uppercase; }
 
 table tr.order-edit {
   display: none;

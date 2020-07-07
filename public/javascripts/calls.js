@@ -42,11 +42,27 @@ const call = {
 				method: 'GET',
 				url: url
 			});
-			return response;			
+			let filteredResponse = response.filter(obj => Object.keys(obj).length !== 0);
+			return filteredResponse;			
+		} catch (error) {
+			console.log('We knocked, but BigC ain\'t answering...\n', error.message);
+		}
+
+	},
+	// Statuses
+	getStatuses: async () => {
+		console.log('Fetching active statuses...');
+		let url = '/api/status';
+		try {
+			let response = await $.ajax({
+				method: 'GET',
+				url: url
+			});
+
+		return response;
 		} catch (error) {
 			console.log(error);
 		}
-
 	},
 	//
 	// UPDATE

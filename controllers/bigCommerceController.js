@@ -43,7 +43,7 @@ module.exports = {
 								if (v.value.data.data.length > 0) {
 									data = v.value.data.data[0];
 									pointer === process.env.BULK_STORE_HASH ? data.source = 'Bulk Apothecary' :
-										pointer === process.env.LBN_STORE_HASH ? data.souce = 'Lip Balm Now' :
+										pointer === process.env.LBN_STORE_HASH ? data.source = 'Lip Balm Now' :
 											data.source = '';
 								}
 								// data = v.value;
