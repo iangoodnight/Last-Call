@@ -18,7 +18,7 @@
 			<hr />
 			<div class="row">
 				<div class="col-sm-12">
-					<p class="card-text"><strong>Contact:</strong></p>
+					<p class="card-text"><strong>Contact Information</strong></p>
 				</div>
 			</div>
 			<div class="row">
@@ -78,7 +78,7 @@
 			</div>
 			<div class="row">
 				<div class="col-sm-12">
-					<button class="btn btn-primary btn-sm save-on-change float-sm-right">Save changes</button>
+					<button class="btn btn-primary btn-sm save-on-change save float-sm-right">Save changes</button>
 				</div>
 			</div>
 		</div>
@@ -225,7 +225,7 @@
 						</tr>
 						<tr class="d-flex">
 							<td class="col-sm-12">
-								<button class='btn btn-primary btn-sm float-sm-right save-order'>Save changes</button>
+								<button class='btn btn-primary btn-sm float-sm-right save save-order'>Save changes</button>
 							</td>
 						</tr>
 					</table>
@@ -235,5 +235,14 @@
 		</tbody>
 	</table>
 	{{/if}}
+</div>
+<div id="toolbar" class="fixed-bottom text-right" style="display: none;">
+	<div class="btn-group" role="group" aria-label="Bulk edit toolbar">
+		<button type="button" id="statusChange" class="btn btn-secondary dropdown-toggle disabled" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>Change status </button>
+    	<div class="dropdown-menu" id="dropdown-statuses" aria-labelledby="statusChange">
+			{{!-- Render statuses here --}}
+    	</div>
+		<button type="button" id="save-all" class="btn btn-primary disabled" disabled>Save all</button>
+	</div>	
 </div>
 <script src="../javascripts/customerProfile.js" type="text/javascript"></script>

@@ -25,6 +25,9 @@ a {
 			color: #0056b3;			
 		}		
 	}
+	&.status {
+		text-transform: uppercase;
+	}
 	i {
 		.sort {
 			color: black;			
@@ -57,6 +60,9 @@ div {
 			color: grey;			
 		}	
 	}
+	.target {
+		background-color: #f8f9fa;
+	}
 	.wrapper {
 		padding: 20px;
 	}
@@ -64,6 +70,7 @@ div {
 
 footer {
 	background-color: black;
+	height: 60px;
 	.container {
 		padding: 10px;
 		color: white;		
@@ -83,14 +90,14 @@ span {
 		margin-bottom: 5px;
 		font-weight: 500;
 	}
-}
-
-span {
 	&.edit {
 		padding-right: 10%;
 		padding-left: 6px;
 		padding-top: 2px;
 		padding-bottom: 2px;	
+	}
+	&.selectAll {
+		background-color: #fff;
 	}
 }
 
@@ -150,7 +157,14 @@ ul {
 //
 // IDs
 //
-
+#toolbar {
+	padding: 10px 40px 10px 10px;
+	margin-bottom: 60px;
+	background-color: rgba(0, 0, 0, .075);
+	button {
+		padding: .25rem 1.25rem;
+	}
+}
 //
 // Classes
 //

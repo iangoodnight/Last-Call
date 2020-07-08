@@ -10,6 +10,9 @@ a.limit {
     border-color: #dee2e6;
     color: #0056b3; }
 
+a.status {
+  text-transform: uppercase; }
+
 a i .sort {
   color: black; }
 
@@ -32,11 +35,15 @@ div .row {
   div .row i {
     color: grey; }
 
+div .target {
+  background-color: #f8f9fa; }
+
 div .wrapper {
   padding: 20px; }
 
 footer {
-  background-color: black; }
+  background-color: black;
+  height: 60px; }
   footer .container {
     padding: 10px;
     color: white; }
@@ -53,6 +60,9 @@ span.edit {
   padding-left: 6px;
   padding-top: 2px;
   padding-bottom: 2px; }
+
+span.selectAll {
+  background-color: #fff; }
 
 table tr td i.fa-search:hover {
   color: #007bff; }
@@ -76,6 +86,13 @@ ul li.page-item a.page-link.active {
 
 ul.nav.nav-tabs {
   border-bottom: none; }
+
+#toolbar {
+  padding: 10px 40px 10px 10px;
+  margin-bottom: 60px;
+  background-color: rgba(0, 0, 0, 0.075); }
+  #toolbar button {
+    padding: .25rem 1.25rem; }
 
 .add {
   font-size: 2em;
