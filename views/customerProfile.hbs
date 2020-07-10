@@ -96,10 +96,18 @@
 		</thead>
 		<tbody>
 		{{#each customer.orders }}
-			<tr class="order-results" data-id="{{this._id}}">
+			<tr class="order-results {{this.status.status}}-row" data-id="{{this._id}}">
 				<td><input type="checkbox"></td>
 				<td class="order-number">{{this.order_number}}</td>
-				<td class="order-details-header">{{this.artwork}}</td>
+				<td class="order-details-header">				<a class="art-link" target="_blank" 
+						{{#if this.artworkHref}}
+						href="{{this.artworkHref}}"
+						{{else}}
+						href="#"
+						{{/if}}>
+						{{this.artwork}}
+					</a>
+				</td>
 				<td class="order-details-header">{{this.qty}}</td>
 				<td class="order-details-header status">{{this.status.status}}</td>
 				<td class="text-center"><i class="fas fa-search open-order"></i></td>
@@ -111,8 +119,15 @@
 						<tr class="d-flex" data-key="artwork">
 							<td class="table-key col-sm-2"><strong>Artwork: </strong></td>
 							<td class="col-sm-8">
-								<span class="edit">
-									{{this.artwork}}
+								<span class="edit input-swap">
+									<a class="art-link" target="_blank" 
+										{{#if this.artworkHref}}
+											href="{{this.artworkHref}}"
+										{{else}}
+											href="#"
+										{{/if}}>
+										{{this.artwork}}
+									</a>
 								</span>
 							</td>
 							<td class="text-right col-sm-2">
@@ -122,7 +137,7 @@
 						<tr class="d-flex" data-key="dimensions">
 							<td class="table-key col-sm-2"><strong>Dimensions: </strong></td>
 							<td class="col-sm-8">
-								<span class="edit">
+								<span class="edit input-swap">
 									{{this.dimensions.dim1}}" x {{this.dimensions.dim2}}"
 								</span>
 							</td>
@@ -155,7 +170,7 @@
 						<tr class="d-flex" data-key="qty">
 							<td class="table-key col-sm-2"><strong>Quantity: </strong></td>
 							<td class="col-sm-8">
-								<span class="edit">
+								<span class="edit input-swap">
 									{{this.qty}}
 								</span>
 							</td>
@@ -166,7 +181,7 @@
 						<tr class="d-flex" data-key="upc">
 							<td class="table-key col-sm-2"><strong>UPC: </strong></td>
 							<td class="col-sm-8">
-								<span class="edit">
+								<span class="edit input-swap">
 									{{this.upc}}
 								</span>
 							</td>
@@ -177,7 +192,7 @@
 						<tr class="d-flex select" data-key="status">
 							<td class="table-key col-sm-2"><strong>Status: </strong></td>
 							<td class="status col-sm-8">
-								<span class="edit input-swap">
+								<span class="edit input-swap" data-status="{{this.status.status}}">
 									{{this.status.status}}
 								</span>
 							</td>
@@ -189,7 +204,7 @@
 						<tr class="d-flex" data-key="outsourced_company">
 							<td class="table-key col-sm-2"><strong>Outsourced: </strong></td>
 							<td class="col-sm-8">
-								<span class="edit">
+								<span class="edit input-swap">
 									{{this.outsourced_company}}
 								</span>
 							</td>
@@ -200,7 +215,7 @@
 						<tr class="d-flex" data-key="po">
 							<td class="table-key col-sm-2"><strong>Purchase Order: </strong></td>
 							<td class="col-sm-8">
-								<span class="edit">
+								<span class="edit input-swap">
 									{{this.po}}
 								</span>
 							</td>
@@ -215,7 +230,7 @@
 								<span class="edit">
 									{{this.notes}}
 								</span>
-								<textarea class="w-100" style="display: none;">
+								<textarea class="w-100 form-control form-control-sm" style="display: none;">
 									{{this.notes}}
 								</textarea>
 							</td>

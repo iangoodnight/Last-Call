@@ -16,6 +16,9 @@ var statusSchema = new Schema({
   	status: {
     	type: String,
     	required: true
+  	},
+  	sortOrder: {
+  		type: Number
   	}
 }, schemaOptions);
 

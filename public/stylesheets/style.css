@@ -1,6 +1,9 @@
 body {
   font-size: .875rem; }
 
+a.art-link {
+  color: #212529; }
+
 a.limit {
   border: 1px solid #dee2e6;
   line-height: 1.25;
@@ -23,6 +26,9 @@ button.save-on-change {
 button.save-order {
   display: none;
   margin-top: 20px; }
+
+div .dimension-edits div.form-row > [class*=col-] {
+  padding: 0px; }
 
 div .notes-entry {
   display: none; }
@@ -51,18 +57,27 @@ footer {
 i.fa-pencil-alt:hover {
   color: #007bff; }
 
-span.key {
-  margin-bottom: 5px;
-  font-weight: 500; }
-
 span.edit {
   padding-right: 10%;
   padding-left: 6px;
   padding-top: 2px;
   padding-bottom: 2px; }
 
+span.key {
+  margin-bottom: 5px;
+  font-weight: 500; }
+
+span.replaced {
+  font-size: 0rem; }
+  span.replaced::after {
+    content: attr(data-status);
+    font-size: .875rem; }
+
 span.selectAll {
   background-color: #fff; }
+
+table tr.new {
+  background-color: rgba(102, 178, 255, 0.2); }
 
 table tr td i.fa-search:hover {
   color: #007bff; }
@@ -87,8 +102,12 @@ ul li.page-item a.page-link.active {
 ul.nav.nav-tabs {
   border-bottom: none; }
 
+#orders-table {
+  margin-bottom: 65px;
+  padding-bottom: 35px; }
+
 #toolbar {
-  padding: 10px 40px 10px 10px;
+  padding: 10px 60px 10px 10px;
   margin-bottom: 60px;
   background-color: rgba(0, 0, 0, 0.075); }
   #toolbar button {

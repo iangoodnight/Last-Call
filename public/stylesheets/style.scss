@@ -3,6 +3,7 @@
 //
 $color-active-grey: #f8f9fa;
 $color-active-medium-grey: rgba(0,0,0,.075);
+$color-default: #212529;
 //
 // Body styles
 //
@@ -15,6 +16,9 @@ body {
 // Elements
 //
 a {
+	&.art-link {
+		color: $color-default;
+	}
 	&.limit {
 		border: 1px solid #dee2e6;
 		line-height: 1.25;
@@ -47,6 +51,9 @@ button {
 }
 
 div {
+	.dimension-edits div.form-row > [class*=col-] {
+		padding: 0px;
+	}
 	.notes-entry {
 		display: none;
 		textarea {
@@ -86,15 +93,22 @@ i {
 }
 
 span {
-	&.key {
-		margin-bottom: 5px;
-		font-weight: 500;
-	}
 	&.edit {
 		padding-right: 10%;
 		padding-left: 6px;
 		padding-top: 2px;
 		padding-bottom: 2px;	
+	}
+	&.key {
+		margin-bottom: 5px;
+		font-weight: 500;
+	}
+	&.replaced {
+		font-size: 0rem;
+		&::after {
+			content: attr(data-status);
+			font-size: .875rem;
+		}
 	}
 	&.selectAll {
 		background-color: #fff;
@@ -103,6 +117,9 @@ span {
 
 table {
 	tr {
+		&.new {
+			background-color: rgba(102, 178, 255, 0.2);
+		}
 		td {
 			i {
 				&.fa-search {
@@ -157,8 +174,13 @@ ul {
 //
 // IDs
 //
+#orders-table {
+	margin-bottom: 65px;
+	padding-bottom: 35px;
+}
+
 #toolbar {
-	padding: 10px 40px 10px 10px;
+	padding: 10px 60px 10px 10px;
 	margin-bottom: 60px;
 	background-color: rgba(0, 0, 0, .075);
 	button {

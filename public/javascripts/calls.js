@@ -69,10 +69,7 @@ const call = {
 	//
 	updateCustomer: async (data, id) => {
 		console.log("Updating customer...");
-		console.log(window.location.origin);
-		// let url = window.location.origin + '/api/customer/' + id;
 		let url = '/api/customer/' + id;
-
 		try {
 			// console.log("Inside URL: ", url);
 			let response = await $.ajax({
@@ -86,5 +83,34 @@ const call = {
 			console.log(error);
 		}
 		// console.log("URL: ", url);
-	}
+	},
+	updateOrder: async (data, id) => {
+		console.log('Updating order...');
+		let url = '/api/job/' + id;
+		try {
+			let response = await $.ajax({
+				method: 'PUT',
+				url: url,
+				data: data
+			});
+			return response;
+		} catch (error) {
+			console.log(error);
+		};
+	},
+	updateManyOrders: async (data) => {
+		console.log('Updating orders...');
+		let url = '/api/job/m/';
+		try {
+			let response = await $.ajax({
+				method: 'PUT',
+				url: url,
+				data: JSON.stringify(data),
+				contentType: 'application/json'
+			});
+			return response;
+		} catch (error) {
+			console.log(error);
+		};
+	},
 };

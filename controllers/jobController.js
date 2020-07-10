@@ -5,13 +5,9 @@ const { body, validationResult } = require('express-validator/check'); // Deprec
 const { sanitizeBody } = require('express-validator/filter'); // Deprecated, come back and fix
 
 module.exports = {
-	// Find all Jobs
-	findAll: async (req, res, next) => {
-		console.log("Hitting jobController.findAll...");
-		let allJobs = await db.Job.find(req.body.query).populate("status");
-		res.json(allJobs);
-	},
-	// Find one Job
+	//
+	// CREATE
+	//
 	// Create a Job
 	create: async (req, res, next) => {
 		let newJob = await db.Job.create(req.body.jobs);
@@ -31,6 +27,7 @@ module.exports = {
 		});
 
 	},
+	// Create many Jobs
 	createMany: async (req, res, next) => {
 		console.log("Hitting jobController.createMany...");
 		let newJobs = await db.Job.collection.insertMany(req.body.jobs);
@@ -59,6 +56,12 @@ module.exports = {
 	//
 	// READ
 	//
+	// Find all Jobs
+	findAll: async (req, res, next) => {
+		console.log("Hitting jobController.findAll...");
+		let allJobs = await db.Job.find(req.body.query).populate("status");
+		res.json(allJobs);
+	},
 	// Find for Job View
 	findAndView: async (req, res, next) => {
 		console.log("Hitting jobController.findAndView...")
@@ -93,6 +96,61 @@ module.exports = {
 		} catch (error) {
 			console.log(error);
 			// res.status(500).send();
-		}
-	}
+		};
+	},
+	//
+	// UPDATE
+	//
+	updateOne: async (req, res, next) => {
+		console.log('Hitting jobController.updateOne...');
+		let id = req.params.id;
+		try {
+			let updatedJob = await db.Job
+				.findByIdAndUpdate(
+					id,
+					{
+						$set: req.body
+					},
+					{
+						new: true,
+						upsert: true,
+						runValidators: true,
+						setDefaultsOnInsert: true
+					}
+				);
+			res.json(updatedJob);			
+		} catch (error) {
+			console.log(error);
+		};
+	},
+	updateMany: async (req, res, next) => {
+		console.log('Hitting jobController.updateMany...');
+		console.log(req.body);
+		let ids = req.body.ids;
+		let newStatus = req.body.status;
+		console.log(`Ids: ${ids}, newStatus: ${newStatus}`);
+		try {
+			let updatedJobs = await db.Job
+				.updateMany(
+					{ 
+						_id: {
+							$in: ids
+						}
+					},
+					{
+						$set: { status: newStatus }
+					},
+					{
+						multi: true
+					}
+				);
+			console.log(updatedJobs);
+			res.json(updatedJobs);
+		} catch (error) {
+			console.log(error);	
+		};
+	},
+	//
+	// DELETE
+	//
 }

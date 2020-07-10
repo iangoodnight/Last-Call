@@ -14,6 +14,8 @@ router.get('/', ah(jobController.findAll));
 //
 // UPDATE
 //
+router.put('/m/', ah(jobController.updateMany));
+router.put('/:id', ah(jobController.updateOne));
 //
 // DELETE
 //

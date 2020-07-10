@@ -14,6 +14,9 @@ var jobSchema = new Schema({
 	artwork: {
 		type: String
 	},
+	artworkHref: {
+		type: String
+	},
 	customer: {
 		type: Schema.Types.ObjectId,
 		ref: 'Customer'
