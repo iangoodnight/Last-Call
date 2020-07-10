@@ -89,10 +89,14 @@ module.exports = {
 					path:'orders',
 					populate: {
 						path: 'status'
-					}
+					},
 				})
 				.lean();
-
+			customer.orders.forEach(order => {
+				order['sortOrder'] = order.status.sortOrder;
+			});
+			customer.orders.sort((a, b) => (a.sortOrder > b.sortOrder) ? 1 : (a.sortOrder === b.sortOrder) ? ((a.order_number > b.order_number) ? 1: -1) : -1);
+			console.log(customer);
 			res.render('customerProfile', {
 				title: 'Express',
 				bodyClass: 'customer-profile',
@@ -101,7 +105,7 @@ module.exports = {
 					active_customer: true,
 					user: req.user,
 				}
-			});			
+			});		
 		} catch (error) {
 			console.log(error);
 		};
