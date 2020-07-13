@@ -92,11 +92,11 @@
 			<th scope="col">Artwork</th>
 			<th scope="col">Qty</th>
 			<th scope="col">Status</th>
-			<th scope="col">Details</th>
+			<th scope="col" style="opacity: 0;">Details</th>
 		</thead>
 		<tbody>
 		{{#each customer.orders }}
-			<tr class="order-results {{this.status.status}}-row" data-id="{{this._id}}">
+			<tr class="order-results" data-status="{{this.status._id}}" data-id="{{this._id}}">
 				<td><input type="checkbox"></td>
 				<td class="order-number">{{this.order_number}}</td>
 				<td class="order-details-header">				<a class="art-link" target="_blank" 

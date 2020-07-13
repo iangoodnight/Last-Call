@@ -1,3 +1,32 @@
+tr[data-status="5ed6a80afe9fa1604e679ee6"] {
+  background-color: rgba(224, 254, 254, 0.5); }
+  tr[data-status="5ed6a80afe9fa1604e679ee6"] td.status {
+    font-weight: bold; }
+
+tr[data-status="5ecec9c1fe9fa1604e607952"],
+tr[data-status="5ececa20fe9fa1604e607986"],
+tr[data-status="5ececaa2fe9fa1604e6079c1"],
+tr[data-status="5ececabffe9fa1604e6079cf"] {
+  background-color: rgba(224, 254, 254, 0.5); }
+
+tr[data-status="5ececb71fe9fa1604e607a20"],
+tr[data-status="5ececb7ffe9fa1604e607a28"] {
+  background-color: rgba(199, 206, 234, 0.5); }
+
+tr[data-status="5ececb24fe9fa1604e6079ff"] {
+  background-color: rgba(255, 218, 193, 0.5); }
+
+tr[data-status="5ececad4fe9fa1604e6079d7"],
+tr[data-status="5ececae4fe9fa1604e6079d9"],
+tr[data-status="5ececaf9fe9fa1604e6079e7"] {
+  background-color: rgba(255, 255, 216, 0.5); }
+
+tr[data-status="5ececba4fe9fa1604e607a2c"] {
+  background-color: rgba(181, 234, 215, 0.5); }
+
+tr[data-status="5ececbb4fe9fa1604e607a3a"] {
+  background-color: rgba(255, 154, 162, 0.5); }
+
 body {
   font-size: .875rem; }
 
@@ -27,8 +56,29 @@ button.save-order {
   display: none;
   margin-top: 20px; }
 
+button.order-filter {
+  font-weight: 600; }
+  button.order-filter.order-queue {
+    background-color: #dffefe; }
+  button.order-filter.production-queue {
+    background-color: #ffffd8; }
+  button.order-filter.outsourced-queue {
+    background-color: #c7ceea; }
+  button.order-filter.onhold-queue {
+    background-color: #ffdac1; }
+  button.order-filter.completed-queue {
+    background-color: #b5ead7; }
+  button.order-filter.cancelled-queue {
+    background-color: #ff9aa2; }
+
 div .dimension-edits div.form-row > [class*=col-] {
   padding: 0px; }
+
+div.card i.fa-pencil-alt {
+  opacity: 0; }
+
+div.card .row:hover i.fa-pencil-alt {
+  opacity: 1.0; }
 
 div .notes-entry {
   display: none; }
@@ -77,7 +127,7 @@ span.selectAll {
   background-color: #fff; }
 
 table tr.new {
-  background-color: rgba(102, 178, 255, 0.2); }
+  background-color: rgba(102, 178, 255, 0.5); }
 
 table tr td i.fa-search:hover {
   color: #007bff; }
@@ -91,8 +141,19 @@ table tr.order-edit {
   display: none;
   background-color: #f8f9fa; }
 
+table tr.order-results i.fa-search {
+  opacity: 0; }
+
+table tr.order-results:hover i.fa-search {
+  opacity: 1.0; }
+
 table.nested td {
   border: none; }
+  table.nested td i.fa-pencil-alt {
+    opacity: 0; }
+
+table.nested tr:hover i.fa-pencil-alt {
+  opacity: 1.0; }
 
 ul li.page-item a.page-link.active {
   font-weight: 500;

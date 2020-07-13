@@ -29,6 +29,8 @@ $( document ).ready(function() {
 		let html = statusList.join('');
 		$('#dropdown-statuses').html(html);
 	})();
+    console.log(statusOptions);
+    console.log(statusIds);
     // Select all contenteditable onFocus
     function selectElementContents(el) {
         let range = document.createRange();
@@ -207,10 +209,12 @@ $( document ).ready(function() {
     };
     // Reset status changes
     function resetStasuses(checkBox) {
+    	console.log(checkBox);
     	checkBox.forEach(line => {
     		let id = $(line).closest('tr').data('id');
-    		let statusSpan = $('#' + id).find('td.status span.edit.replaced');
+    		let statusSpan = $('#' + id).find('td.status span.edit');
     		let originalStatus = statusSpan.text().trim();
+    		console.log(statusSpan);
     		$(line).closest('tr').find('td.status').text(originalStatus);
     		$(line).closest('tr').removeClass('new');
     		statusSpan.removeClass('replaced'); 		
@@ -278,6 +282,9 @@ $( document ).ready(function() {
     $('table.nested').on('click', 'button.save-order', function(e) {
     	let orderElement = $(this).closest('table');
     	let orderId = orderElement.data('id');
+        let resultsRow = $(`tr.order-results[data-id="${orderId}"]`);
+        let currentStatus = orderElement.find('td.status span.edit').text();
+        console.log(`Current status on ${orderId} = ${currentStatus}`);
     	let orderDetails = {};
     	$(orderElement).find('span.new').each(function(index, el) {
     		let key = $( el ).closest('tr').data('key');
@@ -302,8 +309,11 @@ $( document ).ready(function() {
     		};
     	});
     	call.updateOrder(orderDetails, orderId);
-    	resetInputs();
-    	$(this).fadeOut(600);
+    	resultsRow.find('td.status').text(currentStatus);
+        // Uneccesary with page reload, maybe come back and look at it later
+        location.reload();
+    	// resetInputs();
+    	// $(this).fadeOut(600);
     });
     // Handle magnifying glass onClick (Display order details)
     $('.open-order').on('click', (e) => {
@@ -330,9 +340,10 @@ $( document ).ready(function() {
     // Keep state updated with values
     $('tr.select').on('change', 'select.temporary-input', (e) => {
         let newValue = $(e.target).val();
-        $(e.target).closest('td').find('span.edit').text(newValue);
-        $(e.target).closest('td').find('span.edit').addClass('new');
+        let thisTd = $(e.target).closest('td');
         let table = $(e.target).closest('table');
+        thisTd.find('span.edit').text(newValue);
+        thisTd.find('span.edit').addClass('new');
         $(table).find('button.save-order').fadeIn(600);
     });
     // Keep artwork changes updated
@@ -350,7 +361,7 @@ $( document ).ready(function() {
         $(table).find('button.save-order').fadeIn(600);   	
     });
     // Keep UPC and Qty changes updated (this can probably be refactored/combined with some other handlers)
-    $('table.nested').on('keyup', 'input.simple-input', function(e) {
+    $('table.nested').on('keyup, mouseup', 'input.simple-input', function(e) {
     	let span = $(this).closest('tr').find('span.edit');
     	let edit = $(this).val().trim();
         let table = $(e.target).closest('table');
@@ -519,29 +530,35 @@ $( document ).ready(function() {
     		displayToolbar(false, true);
     	} else {
     		let count = countSaveButtons();
-    		let checkBoxes = $('input[type=checkbox]:not(:first)');
-    		resetStasuses([checkBoxes]);
+    		let checkBoxes = Array.from($('input[type=checkbox]:not(:first)'));
+    		resetStasuses(checkBoxes);
     		count ? true: hideToolbar();
-    		checkBoxes.prop('checked', false);
+    		checkBoxes.forEach(check => {
+    			$(check).prop('checked', false);
+    		});
     	};
     });
-    // Save All logic
+    // Save All logic **Status bug
     $('#save-all').on('click', function(e) {
     	let alteredRows = $('tr.order-results.new');
     	let status = $('#statusChange').data('statusid');
     	let changes = new Array();
+        findAndSave();
     	alteredRows.each(function() {
     		let statusText = $(this).find('td.status').text();
     		let orderId = $(this).data('id');
-    		$('#' + orderId).find('td.status span.edit').text(statusText);
-    		$('#' + orderId).find('td.status span.edit').removeClass('replaced');
+    		$('#' + orderId).find('td.status span.edit.replaced').text(statusText);
+    		$('#' + orderId).find('td.status span.edit.replaced').removeClass('replaced');
+            console.log(statusText);
+            $(`tr.order-results[data-id="${orderId}"] td.status`).text(statusText);
     		changes.push(orderId);
     	});
     	let updates = new Data(changes, status);
-    	findAndSave();
-    	call.updateManyOrders(updates);
-    	let boxes = $('input[type="checkbox"]:not(:first)');
-    	// resetStasuses([boxes]);
+    	call.updateManyOrders(updates)
+            .then(() => location.reload())
+            .catch(error => {
+                console.log(error);
+            });
     });
 
     function findAndSave() {
