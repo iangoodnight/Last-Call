@@ -10,7 +10,8 @@ module.exports = {
 	//
 	// Create a Job
 	create: async (req, res, next) => {
-		let newJob = await db.Job.create(req.body.jobs);
+		console.log("Hitting jobController.create...");
+		let newJob = await db.Job.create(req.body);
 		let updateCustomer = await db.Customer.findOneAndUpdate(
 		{
 			_id: req.params.id
@@ -65,22 +66,113 @@ module.exports = {
 	// Find for Job View
 	findAndView: async (req, res, next) => {
 		console.log("Hitting jobController.findAndView...")
-		console.log("Request Query: ", req.query);
-		console.log("Session Request: ", req.session);
-		let match = {};
-		let sort = {};
+		const statusMap = await db.Status.find({});
+		//////// WORK OUT THIS MAPPER
+		var mapper = {
+			statuses: statusMap,
+			getIds: function(arr) {
+				if (arr) {
+					arr.forEach(name => {
+						console.log(`Name: ${name}`);
+						this.statuses.filter((status => {
+							name === status.status
+						}));
+					});
+				};
+				console.log(`Internal statuses: ${this.statuses}`);
+			}
+		}
+		let test = mapper.getIds([
+					'new', 
+					'corresponding',
+					'requested artwork',
+					'rendering artwork',
+					'pending approval'
+				]);
+		console.log(`Test: ${test}`);
+		/////////////////////////////////////////
+		let pageOptions = {
+			match: {},
+			sort: {},
+			limit: 50,
+			skip: 0
+		};
+		if (!req.session.orderQuery) {
+			let orderQuery = {
+				match: {},
+				sort: {},
+				limit: 50,
+				skip: 0
+			};
+			req.session.orderQuery = orderQuery;
+		};
+
+		switch (req.query.filter) {
+			case 'order':
+				let orderQueueStatuses = [
+					'new', 
+					'corresponding',
+					'requested artwork',
+					'rendering artwork',
+					'pending approval'
+				];
+				let orderQueueIds = orderQueueStatuses.map(status => {
+					// console.log(`Status: ${status}`);
+					for (const entry in statusMap) {
+						// console.log(`Entry: ${statusMap[entry]}`);
+						if( statusMap[entry].status === status) {
+							return statusMap[entry]._id;
+						};
+					};
+				});
+				console.log(orderQueueIds);
+				pageOptions.match['status'] = {
+					$in: [
+						"5ecec9c1fe9fa1604e607952",
+						"5ececa20fe9fa1604e607986",
+						"5ececaa2fe9fa1604e6079c1",
+						"5ececabffe9fa1604e6079cf",
+						"5ed6a80afe9fa1604e679ee6"
+					]
+				};
+				console.log('Order queue');
+				break;
+			case 'production':
+				console.log('Production queue');
+				break;
+			case 'outsourced':
+				console.log('Outsourced');
+				break;
+			case 'hold':
+				console.log('On hold');
+				break;
+			case 'completed':
+				console.log('Completed');
+				break;
+			case 'cancelled':
+			 	console.log('Cancelled');
+			 	break;
+			default:
+				break;
+		};
 
 		try {
 
 			const data = await db.Job
-				.find({})
-				.where(match)
+				.find({/*pageOptions.match*/})
+					// .populate('queue')
+				// .where({status: {$in: ["5ececad4fe9fa1604e6079d7"]}})
 				// .skip(parseInt(req.query.skip))
 				// .limit(parseInt(req.query.limit))
 				// .sort(sort)
-				.populate("status")
+				.populate('status', 'sortOrder')
+				// .populate('queue')
 				.populate("customer")
-				.lean();
+				.lean()
+				// .exec(function(err, docs) {
+				// 	let queue = docs.filter(doc => doc.status.sortOrder < 4);
+				// 	return queue;
+				// });
 
 			console.log("Data: ", data);
 

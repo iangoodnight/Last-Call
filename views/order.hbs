@@ -1,28 +1,3 @@
-{{!-- <div class="container-fluid tabs">    
-    <nav class="nav">
-        <ul class="nav nav-tabs" id="orders-tab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <a class="nav-link active" href="#">Order queue</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" href="#">Production queue</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" href="#">Orders on hold</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" href="#">Outsourced orders</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" href="#">Completed orders</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" href="#">Cancelled orders</a>
-            </li>
-        </ul>
-    </nav>
-</div> --}}
-
 <!-- Button trigger modal -->
 <div class="wrapper container">
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#orderModal">
@@ -30,36 +5,216 @@
     </button>
 </div>
 <div class="text-right">
-<div class="btn-group btn-group-sm w-100 justify-content" role="group" aria-label="table display">
-    <button type="button" class="btn btn-sm order-filter order-queue">Order queue</button>
-    <button type="button" class="btn btn-sm order-filter production-queue">Production queue</button>
-    <button type="button" class="btn btn-sm order-filter outsourced-queue">Outsourced</button>
-    <button type="button" class="btn btn-sm order-filter onhold-queue">On hold</button>
-    <button type="button" class="btn btn-sm order-filter completed-queue">Completed</button>
-    <button type="button" class="btn btn-sm order-filter cancelled-queue">Cancelled</button>
-</div>
+    <div class="btn-group btn-group-sm w-100 justify-content" role="group" aria-label="table display">
+        <a href="/orders/order-queue" class="btn btn-sm order-filter order-queue {{#if active.order-queue}}active-queue{{else}}inactive-queue{{/if}}">Order queue</a>
+        <a href="/orders/production-queue" class="btn btn-sm order-filter production-queue {{#if active.production-queue}}active-queue{{else}}inactive-queue{{/if}}">Production queue</a>
+        <a href="/orders/outsourced" class="btn btn-sm order-filter outsourced-queue {{#if active.outsourced }}active-queue{{else}}inactive-queue{{/if}}">Outsourced</a>
+        <a href="/orders/on-hold" class="btn btn-sm order-filter onhold-queue {{#if active.on-hold}}active-queue{{else}}inactive-queue{{/if}}">On hold</a>
+        <a href="/orders/completed" class="btn btn-sm order-filter completed-queue {{#if active.completed}}active-queue{{else}}inactive-queue{{/if}}">Completed</a>
+        <a href="/orders/cancelled" class="btn btn-sm order-filter cancelled-queue {{#if active.cancelled}}active-queue{{else}}inactive-queue{{/if}}">Cancelled</a>
+    </div>
 </div>   
-<div class="container-fluid wrapper" id="order-table">
-    <table class="table">
+<div class="container-fluid wrapper {{filter}}" id="order-table">
+    <table class="table orders">
+        {{!-- ORDER QUEUE HEADERS --}}
+        {{#if active.order-queue}}
         <thead>
+            <th><input type="checkbox" name="select-all"></th>
             <th scope="col">#</th>
+            <th scope="col">Customer</th>
             <th scope="col">Artwork</th>
+            <th scope="col">Quantity</th>
             <th scope="col">Dimensions</th>
             <th scope="col">Laminate</th>
-            <th scope="col">Quantity</th>
             <th scope="col">Status</th>
+            <th scope="col">Date</th>
+            <th></th>
         </thead>
+        {{/if}}
+        {{!-- COMPLETED QUEUE HEADERS --}}
+        {{#if active.completed}}
+        <thead>
+            <th scope="col">#</th>
+            <th scope="col">Customer</th>
+            <th scope="col">Artwork</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Date closed</th>
+        </thead>
+        {{/if}}
+        {{!-- CANCELLED QUEUE HEADERS --}}
+        {{#if active.cancelled}}
+        <thead>
+            <th scope="col">#</th>
+            <th scope="col">Customer</th>
+            <th scope="col">Artwork</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Date closed</th>
+        </thead>
+        {{/if}}
         <tbody>
-            {{#each order }}
-            <tr class="results" data-id="{{this._id}}">
-                <th scope="col">{{this.order_number}}</th>
-                <td>{{this.artwork}}</td>
-                <td>{{this.dimensions.dim1}} X {{this.dimensions.dim2}}</td>
-                <td>{{this.laminate}}</td>
+        {{!-- ORDER QUEUE --}}
+        {{#if active.order-queue}}
+            {{#each order}}
+            <tr class="results" data-id="{{this._id}}" {{#if this.customer}}data-customer="{{this.customer._id}}"{{/if}}>
+                <td><input type="checkbox" name=""></td>
+                <td>{{this.order_number}}</td>
+                <td>
+                {{#if this.customer}}
+                    <a class="art-link" href="/customers/{{this.customer._id}}">{{this.customer.contact_last}}, {{this.customer.contact_first}}</a>
+                    {{else}}---,---{{/if}}
+                </td>
+                <td><a class="art-link" target="_blank" 
+                        {{#if this.artworkHref}}
+                        href="{{this.artworkHref}}"
+                        {{else}}
+                        href="#"
+                        {{/if}}>
+                        {{this.artwork}}
+                    </a>
+                </td>
                 <td>{{this.qty}}</td>
-                <td>{{this.status.status}}</td>
+                <td>{{this.dimensions.dim1}}" x {{this.dimensions.dim2}}"</td>
+                <td>{{this.laminate}}</td>
+                <td class="status">{{this.status}}</td>
+                <td>{{readableDate this.created_at}}</td>
+                <td class="edit-order"><i class="fas fa-search"></i></td>
+            </tr>
+            <tr class="hidden-details">
+                <td colspan="10" class="details-table">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <table class="table table-borderless table-sm nested w-80" data-order="{{this._id}}">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="row" colspan="3">
+                                            Order details
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-key="order_number">
+                                        <th scope="col">Order number:</th>
+                                        <td>{{this.order_number}}</td>
+                                        <td><i class="fa fa-pencil-alt"></i></td>
+                                    </tr>
+                                    <tr data-key="customer">
+                                        <th scope="col">Customer:</th>
+                                        <td>{{this.customer.contact_last}}, {{this.customer.contact_first}}</td>
+                                        <td><i class="fa fa-pencil-alt"></i></td>
+                                    </tr>
+                                    <tr data-key="artwork">
+                                        <th scope="col">Artwork:</th>
+                                        <td>{{this.artwork}}</td>
+                                        <td><i class="fa fa-pencil-alt"></i></td>
+                                    </tr>
+                                    <tr data-key="qty">
+                                        <th scope="col">Quantity:</th>
+                                        <td>{{this.qty}}</td>
+                                        <td><i class="fa fa-pencil-alt"></i></td>
+                                    </tr>
+                                    <tr data-key="dimensions">
+                                        <th scope="col">Dimensions:</th>
+                                        <td>{{this.dimensions.dim1}}" x {{this.dimensions.dim2}}"</td>
+                                        <td><i class="fa fa-pencil-alt"></i></td>
+                                    </tr>
+                                    <tr data-key="laminate">
+                                        <th scope="col">Laminate:</th>
+                                        <td>{{this.laminate}}</td>
+                                        <td><i class="fa fa-pencil-alt"></i></td>
+                                    </tr>
+                                    <tr data-key="machine"> 
+                                        <th scope="col">Machine:</th>
+                                        <td>{{this.machine}}</td>
+                                        <td><i class="fa fa-pencil-alt"></i></td>
+                                    </tr>
+                                    <tr data-key="status">
+                                        <th scope="col">Status:</th>
+                                        <td><span class="status">{{this.status}}</span></td>
+                                        <td><i class="fa fa-pencil-alt"></i></td>
+                                    </tr>
+                                    <tr data-key="created_at">
+                                        <th scpope="col">Order date:</th>
+                                        <td>{{readableDate this.created_at}}</td>
+                                        <td><i class="fa fa-pencil-alt"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>                            
+                        </div>
+                        <div class="col-sm-6">
+                            <table class="table table-borderless table-sm nested w-80">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="row">Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                     <tr>
+                                        <td>
+                                            <div class="row">
+                                                <div class="col-sm-11">
+                                                    {{this.notes}}
+                                                </div>
+                                                <div class="col-sm-1">
+                                                    <i class="fa fa-pencil-alt"></i>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row float-right">
+                        <button class="btn btn-primary btn-sm save-details">Save</button>
+                    </div>
+                </td>
             </tr>
             {{/each}}
+        {{/if}}
+        {{!-- COMPLETED QUEUE --}}
+        {{#if active.completed}}
+            {{#each order}}
+            <tr class="results" data-id="{{this._id}}" {{#if this.customer}}data-customer="{{this.customer._id}}"{{/if}}>
+                <td>{{this.order_number}}</td>
+                <td>
+                {{#if this.customer}}
+                    <a class="art-link" href="/customers/{{this.customer._id}}">{{this.customer.contact_last}}, {{this.customer.contact_first}}</a>
+                    {{else}}---,---{{/if}}
+                </td>
+                <td><a class="art-link" target="_blank" 
+                        {{#if this.artworkHref}}
+                        href="{{this.artworkHref}}"
+                        {{else}}
+                        href="#"
+                        {{/if}}>
+                        {{this.artwork}}
+                    </a>
+                </td>
+                <td>{{this.qty}}</td>
+                <td>{{this.updatedAt}}</td>
+            </tr>
+            {{/each}}
+        {{/if}}
+        {{!-- CANCELLED QUEUE --}}
+        {{#if active.cancelled}}
+            {{#each order}}
+            <tr class="results" data-id="{{this._id}}" {{#if this.customer}}data-customer="{{this.customer._id}}"{{/if}}>
+                <td>{{this.order_number}}</td>
+
+                <td><a class="art-link" target="_blank" 
+                        {{#if this.artworkHref}}
+                        href="{{this.artworkHref}}"
+                        {{else}}
+                        href="#"
+                        {{/if}}>
+                        {{this.artwork}}
+                    </a>
+                </td>
+                <td>{{this.qty}}</td>
+                <td>{{readableDate this.updatedAt}}</td>
+            </tr>
+            {{/each}}
+        {{/if}}
         </tbody>
     </table>
 </div>
@@ -224,4 +379,5 @@
 {{!-- <div class="container results-wrapper">
     <div id="customer-list"></div>
 </div> --}}
-<script src="./javascripts/order.js" type="text/javascript"></script>
+<script src="../javascripts/order.js" type="text/javascript"></script>
+<script src="../javascripts/edits.js" type="text/javascript"></script>

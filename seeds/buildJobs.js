@@ -29,14 +29,28 @@ const statusIds = [
 	"5ececba4fe9fa1604e607a2c",
 	"5ececbb4fe9fa1604e607a3a",
 	"5ed6a80afe9fa1604e679ee6"
-]
+];
+
+const iterations = process.argv[2];
+
+console.log(`Iterations: ${iterations}`);
+
 // const customers = customerController.findAll();
 async function main() {
 	let ids = await getAllActive();
-	let aJob = buildJob(ids);
-	console.log(aJob);
-	// console.log(ids);
-}
+	let end = iterations || 1;
+	try {
+		for (let i = 0; i < end; i++) {
+			let aJob = await buildJob(ids);
+			let id = aJob.customer;
+			await postJob(aJob, id);
+		};		
+	} catch (error) {
+		console.log(error.message);
+	};
+	console.log('Jobs complete');
+
+};
 
 async function getAllActive() {
 	let customers = await axios.get('http://127.0.0.1:3001/api/customer');
@@ -67,7 +81,7 @@ function buildJob(ids) {
 	let priority = true;
 	let qty = seed * 100;
 	let status = statusIds[seed];
-	return new JobData(artwork, customer, dimensions, laminate, notes, open, order_number, priority, qty, status);
+	return new jobs(artwork, customer, dimensions, laminate, notes, open, order_number, priority, qty, status);
 };
 
 function checkSeed(times) {
@@ -79,7 +93,7 @@ function checkSeed(times) {
 	};
 };
 
-function JobData(artwork, customer, dimensions, laminate, notes, open, order_number, priority, qty, status) {
+function jobs(artwork, customer, dimensions, laminate, notes, open, order_number, priority, qty, status) {
 	this.artwork = artwork;
 	this.customer = customer;
 	this.dimensions = dimensions;
@@ -95,8 +109,22 @@ function JobData(artwork, customer, dimensions, laminate, notes, open, order_num
 // Tomorrow.  Check out job seeding.
 
 async function postJob(jobData, id) {
-	await axios.post()
-
-}
+	let url = `http://127.0.0.1:3001/api/job/${id}`;
+	console.log(jobData);
+	let data = JSON.parse(JSON.stringify(jobData));
+	try {
+		await axios({
+			headers: {
+	  			'Access-Control-Allow-Origin': '*',
+	  			'Content-Type': 'application/json',
+			},
+			method: 'post',
+			url: url,
+			data: data
+		});		
+	} catch (error) {
+		console.log(error.message );
+	};
+};
 
 main();

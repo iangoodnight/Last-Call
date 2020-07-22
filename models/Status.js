@@ -22,6 +22,12 @@ var statusSchema = new Schema({
   	}
 }, schemaOptions);
 
+statusSchema.virtual('queue', {
+	ref: 'Job',
+	localField: '_id',
+	foreignField: 'status'
+});
+
 // Create the Status model using the statusSchema
 var Status = mongoose.model('Status', statusSchema);
 

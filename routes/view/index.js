@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const customerController = require('../../controllers/customerController');
 const jobController = require('../../controllers/jobController');
+const statusController = require('../../controllers/statusController');
 const ah = require('express-async-handler');
 const passport = require('passport');
 
@@ -23,22 +24,10 @@ router.get('/', function(req, res, next) {
 router.get('/customers', ah(customerController.findAllAndView));
 /* GET customer profile */
 router.get('/customers/:id', ah(customerController.findOneAndView));
-/* UPDATE customer profile */
-/* Probably need to move this route to the API directory */
-// router.put('customers/:id', ah(customerController.update));
 /* GET orders page */
-// router.get('/orders', function(req, res, next) {
-//   	res.render('order', { 
-//   		title: 'Express', 
-//   		bodyClass: 'order', 
-//   		active: { 
-//   			active_jobs: true,
-//   			user: req.user,
-//   		}
-//   	});
-// });
-// Test findAndView route
 router.get('/orders', ah(jobController.findAndView));
+
+router.get('/orders/:filter', ah(statusController.findByQueue));
 
 
 module.exports = router;

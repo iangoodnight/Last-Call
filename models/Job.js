@@ -7,6 +7,9 @@ var schemaOptions = {
 	timestamps: {
 		createdAt: 'created_at',
 		updatedAt: 'updatedAt'
+	},
+	toJson: {
+		virtuals: true
 	}
 }
 
@@ -74,6 +77,8 @@ var jobSchema = new Schema({
 		max: 100 
 	}
 }, schemaOptions);
+
+// jobSchema.virtual('statusDetails;
 
 // Create the Job model using the jobSchema
 var Job = mongoose.model('Job', jobSchema);

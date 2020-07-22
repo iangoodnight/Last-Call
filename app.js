@@ -11,6 +11,7 @@ const compression = require('compression');
 const helmet = require('helmet');
 const dotenv = require('dotenv');
 const passport = require('passport');
+const moment = require('moment');
 
 dotenv.config();
 /**
@@ -59,7 +60,10 @@ app.engine('hbs', exphbs({
             	"/": lvalue / rvalue,
             	"%": lvalue % rvalue
         	}[operator];
-    	}
+    	},
+      readableDate: function(date) {
+        return moment(date).format('MM/DD/YYYY');
+      }
     }
 }));
 app.set('view engine', 'hbs');
