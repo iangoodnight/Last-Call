@@ -14,56 +14,34 @@
         <a href="/orders/cancelled" class="btn btn-sm order-filter cancelled-queue {{#if active.cancelled}}active-queue{{else}}inactive-queue{{/if}}">Cancelled</a>
     </div>
 </div>   
-<div class="container-fluid wrapper {{filter}}" id="order-table">
+<div class="container-fluid wrapper table-responsive {{filter}}" id="order-table">
     <table class="table orders">
-        {{!-- ORDER QUEUE HEADERS --}}
-        {{#if active.order-queue}}
         <thead>
-            <th><input type="checkbox" name="select-all"></th>
+            <th><input type="checkbox" id="master-check"></th>
             <th scope="col">#</th>
             <th scope="col">Customer</th>
             <th scope="col">Artwork</th>
             <th scope="col">Quantity</th>
             <th scope="col">Dimensions</th>
             <th scope="col">Laminate</th>
+            <th scope="col">Machine</th>
             <th scope="col">Status</th>
             <th scope="col">Date</th>
             <th></th>
         </thead>
-        {{/if}}
-        {{!-- COMPLETED QUEUE HEADERS --}}
-        {{#if active.completed}}
-        <thead>
-            <th scope="col">#</th>
-            <th scope="col">Customer</th>
-            <th scope="col">Artwork</th>
-            <th scope="col">Quantity</th>
-            <th scope="col">Date closed</th>
-        </thead>
-        {{/if}}
-        {{!-- CANCELLED QUEUE HEADERS --}}
-        {{#if active.cancelled}}
-        <thead>
-            <th scope="col">#</th>
-            <th scope="col">Customer</th>
-            <th scope="col">Artwork</th>
-            <th scope="col">Quantity</th>
-            <th scope="col">Date closed</th>
-        </thead>
-        {{/if}}
         <tbody>
         {{!-- ORDER QUEUE --}}
         {{#if active.order-queue}}
             {{#each order}}
             <tr class="results" data-id="{{this._id}}" {{#if this.customer}}data-customer="{{this.customer._id}}"{{/if}}>
-                <td><input type="checkbox" name=""></td>
-                <td>{{this.order_number}}</td>
-                <td>
+                <td class="table-check"><input type="checkbox"></td>
+                <td class="table-order_number">{{this.order_number}}</td>
+                <td class="table-customer">
                 {{#if this.customer}}
                     <a class="art-link" href="/customers/{{this.customer._id}}">{{this.customer.contact_last}}, {{this.customer.contact_first}}</a>
                     {{else}}---,---{{/if}}
                 </td>
-                <td><a class="art-link" target="_blank" 
+                <td class="table-artwork"><a class="art-link" target="_blank"
                         {{#if this.artworkHref}}
                         href="{{this.artworkHref}}"
                         {{else}}
@@ -72,18 +50,19 @@
                         {{this.artwork}}
                     </a>
                 </td>
-                <td>{{this.qty}}</td>
-                <td>{{this.dimensions.dim1}}" x {{this.dimensions.dim2}}"</td>
-                <td>{{this.laminate}}</td>
-                <td class="status">{{this.status}}</td>
-                <td>{{readableDate this.created_at}}</td>
+                <td class="table-qty">{{this.qty}}</td>
+                <td class="table-dimensions">{{this.dimensions.dim1}}" x {{this.dimensions.dim2}}"</td>
+                <td class="table-laminate">{{this.laminate}}</td>
+                <td class="table-machine">{{this.machine}}</td>
+                <td class="table-status status">{{this.status}}</td>
+                <td class="table-date">{{readableDate this.created_at}}</td>
                 <td class="edit-order"><i class="fas fa-search"></i></td>
             </tr>
             <tr class="hidden-details">
-                <td colspan="10" class="details-table">
+                <td colspan="11" class="details-table">
                     <div class="row">
-                        <div class="col-sm-6">
-                            <table class="table table-borderless table-sm nested w-80" data-order="{{this._id}}">
+                        <div class="col-lg-6 col-md-12 col-sm-12 table-responsive">
+                            <table class="table table-borderless table-sm nested reference" data-order="{{this._id}}">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th scope="row" colspan="3">
@@ -94,71 +73,117 @@
                                 <tbody>
                                     <tr data-key="order_number">
                                         <th scope="col">Order number:</th>
-                                        <td>{{this.order_number}}</td>
+                                        <td class="edit">{{this.order_number}}</td>
+                                        <td class="hidden-input">
+                                            <input class="edit-order form-control form-control-sm" type="text" name="order_number" value="{{this.order_number}}">
+                                        </td>
                                         <td><i class="fa fa-pencil-alt"></i></td>
                                     </tr>
-                                    <tr data-key="customer">
+                                    <tr data-key="customer" data-customer="{{this.customer._id}}">
                                         <th scope="col">Customer:</th>
-                                        <td>{{this.customer.contact_last}}, {{this.customer.contact_first}}</td>
-                                        <td><i class="fa fa-pencil-alt"></i></td>
+                                        <td class="edit">{{#if this.customer}}{{this.customer.contact_last}}, {{/if}}{{this.customer.contact_first}}</td>
+                                        <td></td>
                                     </tr>
                                     <tr data-key="artwork">
                                         <th scope="col">Artwork:</th>
-                                        <td>{{this.artwork}}</td>
+                                        <td class="edit">{{this.artwork}}</td>
+                                        <td class="hidden-input">
+                                            <input class="edit-order form-control form-control-sm" type="text" name="artwork" value="{{this.artwork}}">
+                                            <input class="edit-order form-control form-control-sm" type="text" name="artworkHref" value="{{this.artworkHref}}"> 
+                                        </td>
                                         <td><i class="fa fa-pencil-alt"></i></td>
                                     </tr>
                                     <tr data-key="qty">
                                         <th scope="col">Quantity:</th>
-                                        <td>{{this.qty}}</td>
+                                        <td class="edit">{{this.qty}}</td>
+                                        <td class="hidden-input">
+                                            <input class="edit-order form-control form-control-sm" type="number" name="qty" value="{{this.qty}}">
+                                        </td>
                                         <td><i class="fa fa-pencil-alt"></i></td>
                                     </tr>
                                     <tr data-key="dimensions">
                                         <th scope="col">Dimensions:</th>
-                                        <td>{{this.dimensions.dim1}}" x {{this.dimensions.dim2}}"</td>
+                                        <td class="edit">{{this.dimensions.dim1}}" x {{this.dimensions.dim2}}"</td>
+                                        <td class="hidden-input">
+                                            <div class="input-group">
+                                                <input class="edit-order form-control form-control-sm" type="text" name="dim1" value="{{this.dimensions.dim1}}">
+                                                <input class="edit-order form-control form-control-sm" type="text" name="dim2" value="{{this.dimensions.dim2}}">
+                                            </div>
+                                        </td>
                                         <td><i class="fa fa-pencil-alt"></i></td>
                                     </tr>
                                     <tr data-key="laminate">
                                         <th scope="col">Laminate:</th>
-                                        <td>{{this.laminate}}</td>
+                                        <td class="edit">{{this.laminate}}</td>
+                                        <td class="hidden-input">
+                                            <select class="form-control form-control-sm edit-order" name="laminate">
+                                                <option selected="selected">{{this.laminate}}</option>
+                                                <option value="High-gloss">High-gloss</option>
+                                                <option value="Matte">Matte</option>
+                                            </select>
+                                        </td>
                                         <td><i class="fa fa-pencil-alt"></i></td>
                                     </tr>
                                     <tr data-key="machine"> 
                                         <th scope="col">Machine:</th>
-                                        <td>{{this.machine}}</td>
+                                        <td class="edit">{{this.machine}}</td>
+                                        <td class="hidden-input">
+                                            <select class="form-control form-control-sm edit-order" name="machine">
+                                                <option selected="selected">{{this.machine}}</option>
+                                                <option value="Metas">Metas</option>
+                                                <option value="Plotter">Plotter</option>
+                                            </select>
+                                        </td>
                                         <td><i class="fa fa-pencil-alt"></i></td>
                                     </tr>
                                     <tr data-key="status">
                                         <th scope="col">Status:</th>
-                                        <td><span class="status">{{this.status}}</span></td>
+                                        <td class="edit status">{{this.status}}</td>
+                                        <td class="hidden-input">
+                                            <select class="form-control form-control-sm edit-order" name="status">
+                                                <option selected="selected" class="initial">{{this.status}}</option>
+                                                <option value="new">New</option>
+                                                <option value="corresponding">Corresponding</option>
+                                                <option value="requested artwork">Requested artwork</option>
+                                                <option value="rendering artwork">Rendering artwork</option>
+                                                <option value="pending approval">Pending approval</option>
+                                                <option value="approved">Approved</option>
+                                                <option value="awaiting proofs (outsourced)">Awaiting proofs (outsourced)</option>
+                                                <option value="proofs approved (outsourced)">Proofs approved (outsourced)</option>
+                                                <option value="on hold">On hold</option>
+                                                <option value="in progress">In progress</option>
+                                                <option value="printed">Printed</option>
+                                                <option value="cancelled">Cancelled</option>
+                                                <option value="completed">Completed</option>
+                                            </select>
+                                        </td>
                                         <td><i class="fa fa-pencil-alt"></i></td>
                                     </tr>
                                     <tr data-key="created_at">
-                                        <th scpope="col">Order date:</th>
-                                        <td>{{readableDate this.created_at}}</td>
-                                        <td><i class="fa fa-pencil-alt"></i></td>
+                                        <th scope="col">Order date:</th>
+                                        <td class="edit">{{readableDate this.created_at}}</td>
+                                        <td></td>
                                     </tr>
                                 </tbody>
                             </table>                            
                         </div>
-                        <div class="col-sm-6">
-                            <table class="table table-borderless table-sm nested w-80">
+                        <div class="col-lg-6 col-md-12 col-sm-12">
+                            <table class="table table-borderless table-sm nested">
                                 <thead class="thead-dark">
                                     <tr>
-                                        <th scope="row">Notes</th>
+                                        <th scope="row" colspan="11">Notes</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                     <tr>
-                                        <td>
-                                            <div class="row">
-                                                <div class="col-sm-11">
-                                                    {{this.notes}}
-                                                </div>
-                                                <div class="col-sm-1">
-                                                    <i class="fa fa-pencil-alt"></i>
-                                                </div>
-                                            </div>
+                                     <tr data-key="notes">
+                                        <td class="edit" colspan="11">
+                                            {{this.notes}}
                                         </td>
+                                        <td class="hidden-input" colspan="11">
+                                            <textarea class="form-control form-control-sm edit-order" rows="11">{{this.notes}}</textarea>
+                                        </td>
+                                        <td><i class="fa fa-pencil-alt"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -171,53 +196,7 @@
             </tr>
             {{/each}}
         {{/if}}
-        {{!-- COMPLETED QUEUE --}}
-        {{#if active.completed}}
-            {{#each order}}
-            <tr class="results" data-id="{{this._id}}" {{#if this.customer}}data-customer="{{this.customer._id}}"{{/if}}>
-                <td>{{this.order_number}}</td>
-                <td>
-                {{#if this.customer}}
-                    <a class="art-link" href="/customers/{{this.customer._id}}">{{this.customer.contact_last}}, {{this.customer.contact_first}}</a>
-                    {{else}}---,---{{/if}}
-                </td>
-                <td><a class="art-link" target="_blank" 
-                        {{#if this.artworkHref}}
-                        href="{{this.artworkHref}}"
-                        {{else}}
-                        href="#"
-                        {{/if}}>
-                        {{this.artwork}}
-                    </a>
-                </td>
-                <td>{{this.qty}}</td>
-                <td>{{this.updatedAt}}</td>
-            </tr>
-            {{/each}}
-        {{/if}}
-        {{!-- CANCELLED QUEUE --}}
-        {{#if active.cancelled}}
-            {{#each order}}
-            <tr class="results" data-id="{{this._id}}" {{#if this.customer}}data-customer="{{this.customer._id}}"{{/if}}>
-                <td>{{this.order_number}}</td>
-
-                <td><a class="art-link" target="_blank" 
-                        {{#if this.artworkHref}}
-                        href="{{this.artworkHref}}"
-                        {{else}}
-                        href="#"
-                        {{/if}}>
-                        {{this.artwork}}
-                    </a>
-                </td>
-                <td>{{this.qty}}</td>
-                <td>{{readableDate this.updatedAt}}</td>
-            </tr>
-            {{/each}}
-        {{/if}}
-        </tbody>
-    </table>
-</div>
+ 
 
 <!-- Modal -->
 <div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
@@ -376,8 +355,14 @@
     </div>
   </div>
 </div>
-{{!-- <div class="container results-wrapper">
-    <div id="customer-list"></div>
-</div> --}}
+<div id="toolbar" class="fixed-bottom text-right" style="display: none;">
+    <div class="btn-group" role="group" aria-label="Bulk edit toolbar">
+        <button type="button" id="statusChange" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Change status </button>
+        <div class="dropdown-menu" id="dropdown-statuses" aria-labelledby="statusChange">
+            {{!-- Render statuses here --}}
+        </div>
+        <button type="button" id="save-all" class="btn btn-primary" disabled="true">Save all</button>
+    </div>  
+</div>
 <script src="../javascripts/order.js" type="text/javascript"></script>
 <script src="../javascripts/edits.js" type="text/javascript"></script>

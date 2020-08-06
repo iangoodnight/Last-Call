@@ -60,7 +60,12 @@ tr[data-status="#{$status-cancelled}"] {
 // Body styles
 //
 body {
-	font-size: .875rem;
+	font-size: .75rem;
+	&.order {
+		.form-control-sm {
+			font-size: .75rem;
+		}
+	}
 }
 //
 // End body styles
@@ -138,6 +143,7 @@ button {
 		display: none;
 		min-width: 80px;
 		margin-right: 15px;
+		transition: height 350ms ease-in-out;
 	}
 	&.order-filter {
 		font-weight: 600;
@@ -232,6 +238,13 @@ i {
 	}
 }
 
+option {
+	&:checked,
+	&.initial {
+		text-transform: uppercase;
+	}
+}
+
 span {
 	&.edit {
 		padding-right: 10%;
@@ -287,6 +300,15 @@ table {
 			&.details-table {
 				border-left: 1px solid #dee2e6;
 				border-right: 1px solid #dee2e6;
+			}
+			&.hidden {
+				display: none;
+			}
+			&.hidden-input {
+				display: none;
+			}
+			input.hidden {
+				display: none;
 			}
 		}
 		&.order-edit {
