@@ -85,9 +85,11 @@ function changeStatus(checkbox, status) {
 };
 
 function bulkEdit(status) {
-	checkBoxes.forEach(box => {
+	let checked = Array.from(checkBoxes)
+		.filter(box => box.checked);
+	checked.forEach(checkedBox => {
 		// Handle the changes
-		changeStatus(box, status);
+		changeStatus(checkedBox, status);
 	});
 };
 
@@ -273,6 +275,19 @@ function parseStatus(el) {
 	return status;
 };
 
+// HERE IS WHERE WE LEFT OFF
+// CHANGES ALL GRABBED
+// BUILD KEY/VALUE PAIRS FROM EACH ELEMENT
+// PUSH TO ARRAY
+// FILTER OUT DUPLICATE ORDER REFERENCES AND REPLACE WITH MORE COMPLEX OBJECTS
+// PUSH THAT SHIT.
+function searchForChanges() {
+	let changes = Array.from(document.querySelectorAll('tr.new'));
+	changes.forEach(change => {
+		let change;
+	});
+};
+
 // EVENT HANDLERS
 displayIcons.forEach(el => {
 	el.addEventListener('click', showEditPane, false);
@@ -298,7 +313,8 @@ saveBtns.forEach(el => {
 	el.addEventListener('click', handleSave, false);
 });
 
-document.querySelector('input#master-check').addEventListener('change', toggleChecks, false);
+document.querySelector('input#master-check')
+	.addEventListener('change', toggleChecks, false);
 
 bulkStatusSelect.addEventListener('click', function(e) {
 	let selected = e.target;
@@ -324,3 +340,6 @@ checkBoxes.forEach(box => {
 		};
 	});
 }, false);
+
+document.querySelector('button#save-all')
+	.addEventListener('click', searchForChanges, false);

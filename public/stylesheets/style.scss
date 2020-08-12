@@ -184,21 +184,27 @@ div {
 	}
 	&.order-queue {
 		background-color: $color-order;
+		margin-bottom: 80px;
 	}
 	&.production-queue {
 		background-color: $color-production;
+		margin-bottom: 80px;
 	}
 	&.outsourced {
 		background-color: $color-outsourced;
+		margin-bottom: 80px;
 	}
 	&.on-hold {
 		background-color: $color-onhold;
+		margin-bottom: 80px;
 	}
 	&.completed {
 		background-color: $color-completed;
+		margin-bottom: 80px;
 	}
 	&.cancelled {
 		background-color: $color-cancelled;
+		margin-bottom: 80px;
 	}
 	.notes-entry {
 		display: none;

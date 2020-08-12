@@ -116,22 +116,28 @@ div.card .row:hover i.fa-pencil-alt {
   opacity: 1.0; }
 
 div.order-queue {
-  background-color: #dffefe; }
+  background-color: #dffefe;
+  margin-bottom: 80px; }
 
 div.production-queue {
-  background-color: #ffffd8; }
+  background-color: #ffffd8;
+  margin-bottom: 80px; }
 
 div.outsourced {
-  background-color: #c7ceea; }
+  background-color: #c7ceea;
+  margin-bottom: 80px; }
 
 div.on-hold {
-  background-color: #ffdac1; }
+  background-color: #ffdac1;
+  margin-bottom: 80px; }
 
 div.completed {
-  background-color: #b5ead7; }
+  background-color: #b5ead7;
+  margin-bottom: 80px; }
 
 div.cancelled {
-  background-color: #ff9aa2; }
+  background-color: #ff9aa2;
+  margin-bottom: 80px; }
 
 div .notes-entry {
   display: none; }
